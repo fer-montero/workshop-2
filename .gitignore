@@ -1,0 +1,12 @@
+.env
+.venv/
+logs/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+data/work/*
+data/output/*
+!data/work/.gitkeep
+!data/output/.gitkeep
+gx/uncommitted/
+config/airflow.cfg

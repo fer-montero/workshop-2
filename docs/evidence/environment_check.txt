@@ -1,0 +1,8 @@
+﻿Python: 3.12.13
+Airflow: 3.1.8
+pandas: 2.3.3
+Great Expectations: 1.23.1
+SQLAlchemy: 2.0.48
+psycopg2: 2.9.11 (dt dec pq3 ext lo64)
+Connection OK -> grammy_source: current_database()=grammy_source, PostgreSQL 16.15 (Debian 16.15-1.pgdg13+2)
+Connection OK -> music_dw: current_database()=music_dw, PostgreSQL 16.15 (Debian 16.15-1.pgdg13+2)

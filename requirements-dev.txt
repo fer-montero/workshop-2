@@ -1,0 +1,9 @@
+pandas
+great_expectations==1.23.1
+ydata-profiling==4.18.4
+setuptools<81
+jupyter
+ipykernel
+matplotlib
+sqlalchemy
+psycopg2-binary

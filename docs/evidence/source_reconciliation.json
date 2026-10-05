@@ -1,0 +1,45 @@
+{
+  "executed_at_utc": "2026-10-05T18:59:24.383741+00:00",
+  "source_file": "/opt/airflow/data/raw/the_grammy_awards.csv",
+  "target_table": "grammy_source.public.grammy_awards",
+  "csv_rows": 4810,
+  "db_rows": 4810,
+  "csv_null_counts": {
+    "year": 0,
+    "title": 0,
+    "published_at": 0,
+    "updated_at": 0,
+    "category": 0,
+    "nominee": 6,
+    "artist": 1840,
+    "workers": 2190,
+    "img": 1367,
+    "winner": 0
+  },
+  "db_null_counts": {
+    "year": 0,
+    "title": 0,
+    "published_at": 0,
+    "updated_at": 0,
+    "category": 0,
+    "nominee": 6,
+    "artist": 1840,
+    "workers": 2190,
+    "img": 1367,
+    "winner": 0
+  },
+  "csv_year_range": [
+    1958,
+    2019
+  ],
+  "db_year_range": [
+    1958,
+    2019
+  ],
+  "checks": {
+    "row_count_match": true,
+    "null_counts_match": true,
+    "year_range_match": true
+  },
+  "reconciled": true
+}
