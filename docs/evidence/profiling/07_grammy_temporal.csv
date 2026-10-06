@@ -1,0 +1,7 @@
+metric,value
+min year,1958
+max year,2019
+distinct years,62
+missing years in range,none
+published_at unparseable,0
+updated_at unparseable,0

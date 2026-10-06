@@ -1,0 +1,4 @@
+metric,value
+rows,4810
+distinct source_row_number,4810
+"duplicate rows on (year, category, artist), artist not null",2

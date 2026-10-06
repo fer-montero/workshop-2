@@ -1,0 +1,8 @@
+metric,value
+rows,114000
+distinct track_id,89741
+rows whose track_id repeats,40900
+repeated track_ids,16641
+repeated track_ids with >1 genre,16299
+repeated track_ids with >1 popularity value,720
+exact duplicate rows (in-scope columns),450

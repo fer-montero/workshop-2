@@ -1,0 +1,22 @@
+,dtype,non_null,distinct,in_scope
+Unnamed: 0,int64,114000,114000,False
+track_id,object,114000,89741,True
+artists,object,113999,31437,True
+album_name,object,113999,46589,False
+track_name,object,113999,73608,False
+popularity,int64,114000,101,True
+duration_ms,int64,114000,50697,False
+explicit,bool,114000,2,True
+danceability,float64,114000,1174,True
+energy,float64,114000,2083,True
+key,int64,114000,12,False
+loudness,float64,114000,19480,False
+mode,int64,114000,2,False
+speechiness,float64,114000,1489,False
+acousticness,float64,114000,5061,True
+instrumentalness,float64,114000,5346,False
+liveness,float64,114000,1722,False
+valence,float64,114000,1790,True
+tempo,float64,114000,45653,False
+time_signature,int64,114000,5,False
+track_genre,object,114000,114,True

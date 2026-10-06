@@ -1,0 +1,14 @@
+| ID | Dataset / Atributo | Evidencia de perfilado | Riesgo potencial de calidad | Requerimiento |
+|---|---|---|---|---|
+| PR01 | Grammy / artist | 1840 nulos (38.25 %); 246 categorías nunca tienen artista | Premios no atribuibles a un artista: el conteo de reconocimientos queda subestimado | AR1, AR2, AR3 |
+| PR02 | Grammy / artist | 21.28 % de los valores no nulos son colaboraciones (featuring, &, comas) | El texto compuesto no coincide con un artista individual de Spotify | AR1 |
+| PR03 | Grammy ↔ Spotify / artist | Coincidencia de artistas distintos: exacta 31.2 %, normalizada 32.2 % (simples 44.1 %, compuestos 3.5 %) | Sin normalización y separación de colaboraciones se pierden candidatos válidos | AR1, AR2, AR3 |
+| PR04 | Spotify / track_id | 40900 filas con track_id repetido (16641 ids); 16299 con más de un género; 720 con popularidad distinta | Doble conteo de canciones e inflación de promedios de popularidad y audio | AR1, AR3 |
+| PR05 | Spotify / track_genre | 114 etiquetas de género distintas | Demasiado granular para decidir; requiere agrupar en familias | AR2 |
+| PR06 | Spotify / artists | 1 nulos; 26.38 % de filas con varios artistas (';') | Filas sin artista no se pueden cruzar; las colaboraciones deben separarse | AR1, AR2, AR3 |
+| PR07 | Spotify / popularity | 16020 canciones con popularidad 0 (14.05 %); fuera de [0, 100]: 0 | Popularidad 0 puede ser valor real o ausencia de dato; sesga el umbral de 'baja popularidad' | AR1, AR3 |
+| PR08 | Spotify / audio features | energy, valence, danceability, acousticness fuera de [0, 1]: 0; explicit = {False: 104253, True: 9747} | Un valor fuera de escala distorsionaría el perfil sonoro | AR3 |
+| PR09 | Spotify / popularity (temporal) | El dataset no trae fecha de extracción | La popularidad es una foto en un momento; no permite ver tendencia | AR1 (limitación) |
+| PR10 | Grammy / year | Cobertura 1958–2019; años faltantes en el rango: ninguno | Un año fuera de rango o no numérico alteraría el periodo de reconocimiento | AR1 |
+| PR11 | Grammy / winner (fuera de alcance) | winner = {'True': 4810} | Cada registro es un premio ganado: el conteo de registros equivale a premios; no hay nominados | AR1 (definición del KPI) |
+| PR12 | Grammy / (year, category, artist) | 2 registros repetidos en esa combinación | Un mismo reconocimiento podría contarse dos veces | AR1 |

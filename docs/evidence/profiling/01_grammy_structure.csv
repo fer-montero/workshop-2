@@ -1,0 +1,13 @@
+,dtype,non_null,distinct,in_scope
+source_row_number,int64,4810,4810,False
+year,int64,4810,62,True
+title,object,4810,62,False
+published_at,object,4810,4,False
+updated_at,object,4810,10,False
+category,object,4810,638,True
+nominee,object,4804,4131,False
+artist,object,2970,1658,True
+workers,object,2620,2366,False
+img,object,3443,1463,False
+winner,object,4810,1,False
+loaded_at,"datetime64[ns, UTC]",4810,1,False

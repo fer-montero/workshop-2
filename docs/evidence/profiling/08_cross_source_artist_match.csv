@@ -1,0 +1,8 @@
+metric,value
+distinct Spotify artists (after splitting ';'),29858
+distinct Grammy artist values,1658
+Grammy distinct artists matched — exact,517 (31.2%)
+Grammy distinct artists matched — normalized,534 (32.2%)
+Grammy records (with artist) matched — normalized,1310 (44.1%)
+"match rate, simple names — normalized",44.1%
+"match rate, composite names — normalized",3.5%
