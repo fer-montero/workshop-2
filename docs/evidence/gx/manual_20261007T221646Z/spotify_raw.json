@@ -1,13 +1,12 @@
 {
-  "run_id": "manual_20261007T021556Z_injected_failure",
+  "run_id": "manual_20261007T221646Z",
   "stage": "spotify_raw",
-  "executed_at_utc": "2026-10-07T02:15:57.935822+00:00",
-  "overall_success": false,
-  "policy_decision": "BLOCKED",
+  "executed_at_utc": "2026-10-07T22:16:47.480101+00:00",
+  "evaluated_batch": null,
+  "overall_success": true,
+  "policy_decision": "PASS",
   "failed_rules": {
-    "critical": [
-      "DQ03"
-    ],
+    "critical": [],
     "warning": [],
     "info": []
   },
@@ -16,16 +15,16 @@
       "suite": "spotify_raw_suite",
       "layer": "raw",
       "rows_validated": 114000,
-      "success": false,
+      "success": true,
       "statistics": {
         "evaluated_expectations": 21,
-        "successful_expectations": 20,
-        "unsuccessful_expectations": 1,
-        "success_percent": 95.23809523809523
+        "successful_expectations": 21,
+        "unsuccessful_expectations": 0,
+        "success_percent": 100.0
       }
     }
   },
-  "results_file": "/opt/airflow/docs/evidence/gx/manual_20261007T021556Z_injected_failure/spotify_raw.json",
+  "results_file": "/opt/airflow/docs/evidence/gx/manual_20261007T221646Z/spotify_raw.json",
   "rule_results": [
     {
       "rule_id": "DQ01",
@@ -94,7 +93,7 @@
       "unexpected_count": 1,
       "unexpected_percent": 0.0008771929824561403,
       "partial_unexpected_list": [
-        NaN
+        null
       ],
       "raised_exception": false
     },
@@ -143,14 +142,12 @@
         "max_value": 100.0
       },
       "severity": "critical",
-      "success": false,
+      "success": true,
       "observed_value": null,
       "element_count": 114000,
-      "unexpected_count": 1,
-      "unexpected_percent": 0.0008771929824561403,
-      "partial_unexpected_list": [
-        150
-      ],
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
       "raised_exception": false
     },
     {
@@ -168,10 +165,10 @@
       "success": true,
       "observed_value": null,
       "element_count": 114000,
-      "unexpected_count": 16021,
-      "unexpected_percent": 14.053508771929824,
+      "unexpected_count": 16020,
+      "unexpected_percent": 14.05263157894737,
       "partial_unexpected_list": [
-        150,
+        0,
         0,
         0,
         0,

@@ -1,7 +1,8 @@
 {
-  "run_id": "manual_20261007T021421Z",
+  "run_id": "manual_20261007T221646Z",
   "stage": "grammy_raw",
-  "executed_at_utc": "2026-10-07T02:14:23.652056+00:00",
+  "executed_at_utc": "2026-10-07T22:16:47.697765+00:00",
+  "evaluated_batch": null,
   "overall_success": false,
   "policy_decision": "PASS_WITH_FINDINGS",
   "failed_rules": {
@@ -25,7 +26,7 @@
       }
     }
   },
-  "results_file": "/opt/airflow/docs/evidence/gx/manual_20261007T021421Z/grammy_raw.json",
+  "results_file": "/opt/airflow/docs/evidence/gx/manual_20261007T221646Z/grammy_raw.json",
   "rule_results": [
     {
       "rule_id": "DQ09",

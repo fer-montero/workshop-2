@@ -1,6 +1,6 @@
 {
   "name": "spotify_raw_suite",
-  "id": "76287611-81c6-48c6-b10b-20c3ee7ccd37",
+  "id": "ed016078-e5a3-4530-ae18-ccc10ba74c24",
   "expectations": [
     {
       "type": "expect_column_to_exist",
@@ -10,7 +10,7 @@
       "meta": {
         "rule_id": "DQ01"
       },
-      "id": "b8622a2b-48b6-4a00-8f63-1719472ed90a",
+      "id": "f58abfca-99be-4139-8d35-09d08bee2423",
       "severity": "critical"
     },
     {
@@ -21,7 +21,7 @@
       "meta": {
         "rule_id": "DQ01"
       },
-      "id": "8014de02-2f76-4756-a84c-ef43d4e94057",
+      "id": "2ea1ad73-2d81-4b34-a6ac-309f46427ec9",
       "severity": "critical"
     },
     {
@@ -32,7 +32,7 @@
       "meta": {
         "rule_id": "DQ01"
       },
-      "id": "d525e044-a356-45d1-b91b-41df39abcc35",
+      "id": "687383ff-92e1-4463-a4bd-18a0a6ee1a31",
       "severity": "critical"
     },
     {
@@ -43,7 +43,7 @@
       "meta": {
         "rule_id": "DQ01"
       },
-      "id": "a4d997ff-133a-49f8-a20e-15c6363f9f8d",
+      "id": "789fa128-8f17-40a5-923c-adc51a071815",
       "severity": "critical"
     },
     {
@@ -54,7 +54,7 @@
       "meta": {
         "rule_id": "DQ01"
       },
-      "id": "ca90d8d3-2c34-4dfc-a746-663bc1552ad2",
+      "id": "3693d05f-5da9-4c47-b97a-3b6a00b9083f",
       "severity": "critical"
     },
     {
@@ -65,7 +65,7 @@
       "meta": {
         "rule_id": "DQ01"
       },
-      "id": "1e4e43a6-6d65-422d-a57e-b45e4ec615f1",
+      "id": "f790997b-c6ce-4a76-ade6-4ca4c7b883da",
       "severity": "critical"
     },
     {
@@ -76,7 +76,7 @@
       "meta": {
         "rule_id": "DQ01"
       },
-      "id": "65d7a8c6-2c36-4050-9bfb-f7779bf7268c",
+      "id": "e5848440-03ea-4d42-a5f1-585f3fafa1c5",
       "severity": "critical"
     },
     {
@@ -87,7 +87,7 @@
       "meta": {
         "rule_id": "DQ01"
       },
-      "id": "d45a1375-7575-482b-a247-78755b58d005",
+      "id": "dd022da5-167a-43d0-bcaf-dcf93c006a3f",
       "severity": "critical"
     },
     {
@@ -98,7 +98,7 @@
       "meta": {
         "rule_id": "DQ01"
       },
-      "id": "082a0ee6-8c15-42ad-a9d0-e1f9409a2a4e",
+      "id": "c248afb5-d16b-4854-9183-e331a07643e8",
       "severity": "critical"
     },
     {
@@ -109,7 +109,7 @@
       "meta": {
         "rule_id": "DQ01"
       },
-      "id": "4734b9dc-bc54-476f-9ff8-c63c071bff52",
+      "id": "48bff1d1-e786-4d3e-9cbd-f702a7cbaea6",
       "severity": "critical"
     },
     {
@@ -120,7 +120,7 @@
       "meta": {
         "rule_id": "DQ02"
       },
-      "id": "649db72b-1b03-4fe8-9722-5cd28a839120",
+      "id": "b6d45e38-f81f-4293-b83a-3887f4ab08f7",
       "severity": "critical"
     },
     {
@@ -131,7 +131,7 @@
       "meta": {
         "rule_id": "DQ03"
       },
-      "id": "8fc1cb4a-978d-49ac-9380-284eb3054589",
+      "id": "436c7a23-02f1-4c3c-b2c3-f2ccccd508c3",
       "severity": "critical"
     },
     {
@@ -144,7 +144,7 @@
       "meta": {
         "rule_id": "DQ03"
       },
-      "id": "fcd65c58-7467-4486-ab4d-dcf87735a52e",
+      "id": "9184fb6e-7c8d-48b3-af56-df8a3c319353",
       "severity": "critical"
     },
     {
@@ -157,7 +157,7 @@
       "meta": {
         "rule_id": "DQ04"
       },
-      "id": "ea7cbe83-74b5-46f4-a684-b94ad6606278",
+      "id": "8bf3c90a-2eed-47f6-bac4-abe5514ce673",
       "severity": "critical"
     },
     {
@@ -170,7 +170,7 @@
       "meta": {
         "rule_id": "DQ04"
       },
-      "id": "3ff7fce3-4542-4904-aaf3-badb833879ed",
+      "id": "aa99ef7c-f7af-43de-a43d-3dd15bb8383c",
       "severity": "critical"
     },
     {
@@ -183,7 +183,7 @@
       "meta": {
         "rule_id": "DQ04"
       },
-      "id": "10586761-5d33-4a93-b5e8-80742859b340",
+      "id": "dd4c37a2-a2a3-4281-ba85-02d94877757b",
       "severity": "critical"
     },
     {
@@ -196,7 +196,7 @@
       "meta": {
         "rule_id": "DQ04"
       },
-      "id": "e68be5a5-5038-4c55-801c-ebe1f1624d6a",
+      "id": "eea7d367-6f6e-4a66-8c39-da93671d36f0",
       "severity": "critical"
     },
     {
@@ -211,7 +211,7 @@
       "meta": {
         "rule_id": "DQ05"
       },
-      "id": "36495c6a-694f-4adb-bd6c-3c4924aa22d1",
+      "id": "e990af19-1d4e-4975-b615-ece59d0d6f3a",
       "severity": "critical"
     },
     {
@@ -222,7 +222,7 @@
       "meta": {
         "rule_id": "DQ06"
       },
-      "id": "09460e6c-2db6-481a-8bd9-f9c5408b96da",
+      "id": "cf3fd3e6-71e3-4409-8666-4e3f44ad18c9",
       "severity": "critical"
     },
     {
@@ -234,7 +234,7 @@
       "meta": {
         "rule_id": "DQ07"
       },
-      "id": "4f6d2991-08d5-44f8-aa9b-62df72e14d3a",
+      "id": "bd212b7b-6b9c-480d-80ae-aedfb9a8e242",
       "severity": "warning"
     },
     {
@@ -248,7 +248,7 @@
       "meta": {
         "rule_id": "DQ08"
       },
-      "id": "9f9e02f3-a1ec-477b-8e0f-290a3796769f",
+      "id": "378087ca-4be1-4001-86ff-69eb033c8049",
       "severity": "info"
     }
   ],

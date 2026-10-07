@@ -25,7 +25,9 @@ from __future__ import annotations
 import csv
 import json
 import logging
+import math
 import os
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -167,9 +169,11 @@ def _jsonable(value):
         return [_jsonable(v) for v in value]
     if hasattr(value, "item"):
         try:
-            return value.item()
+            value = value.item()
         except (ValueError, TypeError):
             pass
+    if isinstance(value, float) and not math.isfinite(value):
+        return None  # NaN / inf are not valid JSON -> null
     if isinstance(value, (str, int, float, bool)) or value is None:
         return value
     return str(value)
@@ -198,11 +202,18 @@ def _rule_record(data_object: str, suite_name: str, res) -> dict:
     })
 
 
-def run_validation(data_objects: dict, stage: str, run_id: str, **suite_kwargs) -> dict:
+def _safe_run_id(run_id: str) -> str:
+    """Airflow run ids contain ':' and '+', which are invalid in Windows folder names."""
+    return re.sub(r"[^A-Za-z0-9_.-]", "_", run_id)
+
+
+def run_validation(data_objects: dict, stage: str, run_id: str,
+                   batch_info: dict | None = None, **suite_kwargs) -> dict:
     """
     Validate one or more data objects with their suites and persist the evidence.
 
     data_objects: {"spotify_raw": dataframe, ...} using names from VALIDATION_TARGETS.
+    batch_info:   optional reference to the evaluated batch (file path, metadata path).
     Returns a small JSON-serializable summary (safe to pass through XCom).
     Does NOT raise on failures: call enforce_severity_policy() to apply the policy.
     """
@@ -253,7 +264,7 @@ def run_validation(data_objects: dict, stage: str, run_id: str, **suite_kwargs) 
     else:
         decision = "PASS"
 
-    out_dir = RESULTS_DIR / run_id
+    out_dir = RESULTS_DIR / _safe_run_id(run_id)
     out_dir.mkdir(parents=True, exist_ok=True)
     results_file = out_dir / f"{stage}.json"
 
@@ -261,6 +272,7 @@ def run_validation(data_objects: dict, stage: str, run_id: str, **suite_kwargs) 
         "run_id": run_id,
         "stage": stage,
         "executed_at_utc": datetime.now(timezone.utc).isoformat(),
+        "evaluated_batch": batch_info,
         "overall_success": all(o["success"] for o in objects.values()),
         "policy_decision": decision,
         "failed_rules": failed,
@@ -268,7 +280,7 @@ def run_validation(data_objects: dict, stage: str, run_id: str, **suite_kwargs) 
         "results_file": str(results_file),
     }
     results_file.write_text(
-        json.dumps({**summary, "rule_results": records}, indent=2, ensure_ascii=False),
+        json.dumps({**summary, "rule_results": records}, indent=2, ensure_ascii=False, allow_nan=False),
         encoding="utf-8",
     )
     log.info("GX %s -> %s | failed rules: %s | evidence: %s", stage, decision, failed, results_file)
@@ -287,6 +299,45 @@ def enforce_severity_policy(summary: dict) -> None:
             f"[{summary['stage']}] critical rules failed: {failed[CRITICAL]}. "
             f"Evidence: {summary['results_file']}"
         )
+
+
+# ---------------------------------------------------------------------------
+# Raw validation gate (README section 6.7)
+# ---------------------------------------------------------------------------
+RAW_DATASETS = ("spotify_raw", "grammy_raw")
+
+
+def validate_raw_batch(extract_result: dict, run_id: str) -> dict:
+    """
+    Raw validation gate: "Are the incoming data safe enough to continue processing?"
+
+    1. Reads the exact batch written by the extraction task (no cleaning).
+    2. Validates it with its raw suite and persists the evidence, linked to the batch.
+    3. Applies the severity policy: raises CriticalQualityFailure if a critical rule fails.
+
+    Returns the summary (XCom-safe) when the batch may continue.
+    """
+    import pandas as pd
+
+    dataset = extract_result["dataset"]
+    if dataset not in RAW_DATASETS:
+        raise ValueError(f"Unknown raw dataset: {dataset}")
+
+    dataframe = pd.read_csv(extract_result["path"])
+    batch_info = {
+        "path": extract_result["path"],
+        "metadata_path": extract_result.get("metadata_path"),
+        "rows_extracted": extract_result.get("rows"),
+    }
+    if len(dataframe) != extract_result.get("rows", len(dataframe)):
+        raise ValueError(
+            f"{dataset}: batch on disk has {len(dataframe)} rows but extraction reported "
+            f"{extract_result['rows']}. The evaluated batch is not the extracted one."
+        )
+
+    summary = run_validation({dataset: dataframe}, stage=dataset, run_id=run_id, batch_info=batch_info)
+    enforce_severity_policy(summary)
+    return summary
 
 
 # ---------------------------------------------------------------------------
@@ -319,7 +370,7 @@ def export_suites(objects: list[str] | None = None, **suite_kwargs) -> list[Path
                 "kwargs": json.dumps(_jsonable(kwargs), ensure_ascii=False),
             })
         path = SUITES_DIR / f"{suite_name}.json"
-        path.write_text(json.dumps(_jsonable(suite.to_json_dict()), indent=2, ensure_ascii=False),
+        path.write_text(json.dumps(_jsonable(suite.to_json_dict()), indent=2, ensure_ascii=False, allow_nan=False),
                         encoding="utf-8")
         written.append(path)
 
