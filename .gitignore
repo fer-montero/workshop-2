@@ -10,3 +10,4 @@ data/output/*
 !data/output/.gitkeep
 gx/uncommitted/
 config/airflow.cfg
+data/test/
