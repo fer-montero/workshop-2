@@ -1,0 +1,32 @@
+{
+  "name": "fact_track_suite",
+  "id": "6fafd28d-3d19-4830-b3e0-73be26ddac7f",
+  "expectations": [
+    {
+      "type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "track_id"
+      },
+      "meta": {
+        "rule_id": "DQ14"
+      },
+      "id": "734a585a-88b6-4831-9010-fcee7b2f0674",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "track_id"
+      },
+      "meta": {
+        "rule_id": "DQ14"
+      },
+      "id": "a3b922ba-1b61-48a1-bb65-1035ae63ee49",
+      "severity": "critical"
+    }
+  ],
+  "meta": {
+    "great_expectations_version": "1.23.1"
+  },
+  "notes": null
+}

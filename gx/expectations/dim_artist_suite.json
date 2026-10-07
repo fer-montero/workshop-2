@@ -1,0 +1,90 @@
+{
+  "name": "dim_artist_suite",
+  "id": "e24578f3-0380-469f-a909-70cbceb23a71",
+  "expectations": [
+    {
+      "type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "artist_norm"
+      },
+      "meta": {
+        "rule_id": "DQ15"
+      },
+      "id": "9c1e3df9-7519-4b2a-aa2c-6a0248f66fbe",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "artist_norm"
+      },
+      "meta": {
+        "rule_id": "DQ15"
+      },
+      "id": "d559171c-60e4-4eea-a05c-c3b4571f93a4",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_match_regex",
+      "kwargs": {
+        "column": "artist_norm",
+        "regex": "^[^\\sA-Z](?:[^A-Z]*[^\\sA-Z])?$"
+      },
+      "meta": {
+        "rule_id": "DQ15"
+      },
+      "id": "d33ab343-2be1-4816-aafb-36284b317980",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_not_match_regex",
+      "kwargs": {
+        "column": "artist_norm",
+        "regex": "\\s{2,}"
+      },
+      "meta": {
+        "rule_id": "DQ15"
+      },
+      "id": "c54d6edb-9205-449f-92ff-d3ee08debc81",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "segment",
+        "value_set": [
+          "candidato",
+          "consolidado",
+          "no aplica"
+        ]
+      },
+      "meta": {
+        "rule_id": "DQ17"
+      },
+      "id": "90d1a8c9-1b1d-40af-8fe4-caa68cec4702",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_mean_to_be_between",
+      "kwargs": {
+        "column": "in_spotify",
+        "row_condition": {
+          "pass_through_filter": "in_grammy == True and artist_key != 0",
+          "type": "pass_through"
+        },
+        "condition_parser": "pandas",
+        "min_value": 0.25,
+        "max_value": 1.0
+      },
+      "meta": {
+        "rule_id": "DQ18"
+      },
+      "id": "4251b39d-9d91-4b5b-92d2-0bc4bb4af70e",
+      "severity": "warning"
+    }
+  ],
+  "meta": {
+    "great_expectations_version": "1.23.1"
+  },
+  "notes": null
+}

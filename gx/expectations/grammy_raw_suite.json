@@ -1,0 +1,117 @@
+{
+  "name": "grammy_raw_suite",
+  "id": "bfc7acd5-d04d-480c-95aa-994889fc0993",
+  "expectations": [
+    {
+      "type": "expect_column_to_exist",
+      "kwargs": {
+        "column": "year"
+      },
+      "meta": {
+        "rule_id": "DQ09"
+      },
+      "id": "3beca0d9-975e-40f7-b93d-a3e7a6ae25cb",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_to_exist",
+      "kwargs": {
+        "column": "category"
+      },
+      "meta": {
+        "rule_id": "DQ09"
+      },
+      "id": "5a5d7bdd-e503-4b00-afde-6b20f5bcd33b",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_to_exist",
+      "kwargs": {
+        "column": "artist"
+      },
+      "meta": {
+        "rule_id": "DQ09"
+      },
+      "id": "960faae9-6a25-4f77-952b-cb1cc85e4380",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_table_row_count_to_be_between",
+      "kwargs": {
+        "min_value": 1
+      },
+      "meta": {
+        "rule_id": "DQ09"
+      },
+      "id": "4a32850b-5ad8-419e-b093-74f897e4cc40",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "year"
+      },
+      "meta": {
+        "rule_id": "DQ10"
+      },
+      "id": "41761eb9-2797-468c-be6c-e8cf60223c6d",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "year",
+        "min_value": 1958.0,
+        "max_value": 2026.0
+      },
+      "meta": {
+        "rule_id": "DQ10"
+      },
+      "id": "c8a59fea-ee9c-4e34-a848-60b8d0e626a2",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "category"
+      },
+      "meta": {
+        "rule_id": "DQ11"
+      },
+      "id": "1991bd06-22b0-4784-9530-bf8e4a793fca",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "artist",
+        "mostly": 0.6
+      },
+      "meta": {
+        "rule_id": "DQ12"
+      },
+      "id": "ae31c8bc-2032-49fb-bf8c-1fcf236a663b",
+      "severity": "warning"
+    },
+    {
+      "type": "expect_compound_columns_to_be_unique",
+      "kwargs": {
+        "column_list": [
+          "year",
+          "category",
+          "artist"
+        ],
+        "ignore_row_if": "any_value_is_missing"
+      },
+      "meta": {
+        "rule_id": "DQ13"
+      },
+      "id": "56757ac5-2fef-4480-b7dc-d864c5ab6e14",
+      "severity": "info"
+    }
+  ],
+  "meta": {
+    "great_expectations_version": "1.23.1"
+  },
+  "notes": null
+}
