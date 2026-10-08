@@ -1,17 +1,17 @@
 """
 Resonance Records - reliable batch pipeline (Airflow 3.1.8, TaskFlow API).
 
-Current scope (README sections 6.7 to 6.9):
+Current scope (README sections 6.7 to 6.10):
 
     extract_spotify -> validate_spotify_raw --\
-                                               >-- transform_and_integrate -> validate_prepared
+                                               >-- transform_and_integrate -> validate_prepared -> load_dw
     extract_grammys -> validate_grammys_raw --/
 
 transform_and_integrate runs only when BOTH raw gates let their batch continue, and it reads
 exactly the batches that were validated. validate_prepared is the second mandatory gate:
-load_dw (section 6.10) will run only if it has no critical failure.
+load_dw runs only if it has no critical failure (otherwise load_dw ends as upstream_failed).
 
-The DAG only orchestrates. Business logic lives in src/ (extract.py, validation.py).
+The DAG only orchestrates. Business logic lives in src/ (extract, validation, transform, load).
 Heavy libraries (pandas, Great Expectations) are imported inside tasks so the DAG file
 parses fast in the dag-processor.
 """
@@ -66,6 +66,12 @@ def _raw_gate(extract_result: dict) -> dict:
             type="string",
             enum=["none", "duplicate_track"],
             description="TEST-ONLY: inject a controlled prepared-data failure (DQ14) in memory.",
+        ),
+        "load_fault": Param(
+            "none",
+            type="string",
+            enum=["none", "fail_after_facts"],
+            description="TEST-ONLY: crash load_dw after the fact tables to prove the rollback.",
         ),
     },
     tags=["etl", "great-expectations", "resonance-records"],
@@ -129,9 +135,35 @@ def reliable_music_pipeline():
         return {"policy_decision": summary["policy_decision"], "failed_rules": summary["failed_rules"],
                 "results_file": summary["results_file"], "tables": transform_result["tables"]}
 
+    # ------------------------------------------------------------------ load
+    @task(task_id="load_dw", retries=2, retry_delay=pendulum.duration(seconds=30))
+    def load_dw_task(prepared_gate: dict) -> dict:
+        """
+        Transactional truncate-and-load into music_dw.
+        Retries only for transient problems (e.g. lost DB connection): the load is idempotent,
+        so retrying is safe. Data problems (FK/CHECK/UNIQUE) and the test fault fail at once.
+        """
+        from sqlalchemy.exc import DataError, IntegrityError
+
+        from src.load import InjectedLoadFailure, load_dw
+
+        context = get_current_context()
+        try:
+            result = load_dw(prepared_gate["tables"], context["run_id"],
+                             fault=context["params"]["load_fault"])
+        except (IntegrityError, DataError, InjectedLoadFailure) as exc:
+            # exc.orig is the short PostgreSQL message (without the huge INSERT statement).
+            cause = str(getattr(exc, "orig", exc)).strip()
+            raise AirflowFailException(f"Load rolled back, warehouse unchanged: {cause}") from exc
+
+        log.info("Load %s in %ss | rows: %s | evidence: %s", result["status"],
+                 result["duration_seconds"], result["rows_loaded"], result["evidence_file"])
+        return result
+
     spotify_ok = validate_spotify_raw(extract_spotify_task())
     grammy_ok = validate_grammys_raw(extract_grammys_task())
-    validate_prepared(transform_and_integrate(spotify_ok, grammy_ok))
+    prepared_ok = validate_prepared(transform_and_integrate(spotify_ok, grammy_ok))
+    load_dw_task(prepared_ok)
 
 
 reliable_music_pipeline()

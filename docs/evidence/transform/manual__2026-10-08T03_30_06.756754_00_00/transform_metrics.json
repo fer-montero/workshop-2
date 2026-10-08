@@ -1,0 +1,100 @@
+{
+  "run_id": "manual__2026-10-08T03:30:06.756754+00:00",
+  "executed_at_utc": "2026-10-08T03:30:52.357133+00:00",
+  "input_batches": {
+    "spotify": "/opt/airflow/data/work/manual__2026-10-08T03_30_06.756754_00_00/spotify_raw.csv",
+    "grammy": "/opt/airflow/data/work/manual__2026-10-08T03_30_06.756754_00_00/grammy_raw.csv"
+  },
+  "spotify": {
+    "rows_in": 114000,
+    "tracks_out": 89741,
+    "duplicate_rows_collapsed": 24259,
+    "tracks_with_popularity_conflict": 720,
+    "tracks_without_artist": 1,
+    "unusable_artist_names": 0,
+    "track_artist_pairs": 123424,
+    "multi_artist_tracks": 22586,
+    "distinct_spotify_artists": 29796,
+    "track_genre_pairs": 113550,
+    "multi_genre_tracks": 16299
+  },
+  "genres": {
+    "genres": 114,
+    "families": 12,
+    "unmapped_genres": [],
+    "genres_per_family": {
+      "Electrónica": 20,
+      "Rock": 15,
+      "Contexto y Ánimo": 13,
+      "Latina": 12,
+      "Pop": 11,
+      "Regional / Internacional": 9,
+      "Country y Folk": 8,
+      "Metal": 8,
+      "Hip-hop, R&B y Soul": 6,
+      "Reggae y Afro": 5,
+      "Clásica e Instrumental": 5,
+      "Jazz y Blues": 2
+    }
+  },
+  "grammy": {
+    "rows_in": 4810,
+    "awards_out": 4810,
+    "award_credit_rows": 4896,
+    "awards_with_featuring": 86,
+    "awards_without_artist": 1840,
+    "categories": 637,
+    "technical_categories": 245,
+    "artistic_categories": 392,
+    "distinct_grammy_artists": 1660,
+    "years": 62
+  },
+  "integration": {
+    "grammy_distinct_names": 1660,
+    "names_by_match_method": {
+      "unmatched": 987,
+      "exact": 573,
+      "composite_split": 92,
+      "article_variant": 7,
+      "non_attributable": 1
+    },
+    "attributable_names": 1659,
+    "name_match_rate_pct": 40.5,
+    "composite_names_split": 92,
+    "awards_with_attributable_artist": 2904,
+    "awards_with_spotify_artist": 1481,
+    "award_match_rate_pct": 51.0,
+    "awards_to_unknown_member": 1906,
+    "dim_artist_rows": 30784,
+    "artists_in_both_sources": 645,
+    "grammy_only_artists": 987,
+    "spotify_only_artists": 29151
+  },
+  "segments": {
+    "popularity_measure": "max_popularity",
+    "thresholds": {
+      "min_awards": 3,
+      "candidate_popularity_below": 25.0,
+      "consolidated_popularity_from": 41.0
+    },
+    "eligible_artists": 645,
+    "segments": {
+      "no aplica": 30600,
+      "consolidado": 151,
+      "candidato": 33
+    },
+    "candidates_with_popularity_zero": 15,
+    "middle_band_excluded": 11
+  },
+  "table_rows": {
+    "dim_artist": 30784,
+    "dim_genre": 114,
+    "dim_category": 637,
+    "dim_year": 62,
+    "fact_track": 89741,
+    "fact_award": 5012,
+    "bridge_track_artist": 123424,
+    "bridge_track_genre": 113550
+  },
+  "awards_reconcile_with_source": true
+}
