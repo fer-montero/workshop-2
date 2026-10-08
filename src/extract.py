@@ -28,6 +28,17 @@ SPOTIFY_SOURCE = DATA_DIR / "raw" / "spotify_dataset.csv"
 GRAMMY_TABLE = "grammy_awards"
 
 
+def read_csv_exact(path, **kwargs) -> pd.DataFrame:
+    """
+    Read a CSV WITHOUT pandas' default missing-value guessing.
+
+    By default pandas turns texts such as "NA", "None", "null" or "nan" into NaN. That silently
+    changes real values (e.g. an artist literally named "NA"). Only truly empty fields are
+    treated as missing, which is the documented rule of the whole pipeline.
+    """
+    return pd.read_csv(path, keep_default_na=False, na_values=[""], **kwargs)
+
+
 def safe_run_id(run_id: str) -> str:
     """Airflow run ids contain ':' and '+', which are invalid in Windows folder names."""
     return re.sub(r"[^A-Za-z0-9_.-]", "_", run_id)
@@ -70,12 +81,12 @@ def _write_outputs(df: pd.DataFrame, name: str, run_id: str, source: dict) -> di
 
 
 def extract_spotify(run_id: str, source_path: Path | str = SPOTIFY_SOURCE) -> dict:
-    """Read the Spotify CSV exactly as delivered (all columns, default parsing)."""
+    """Read the Spotify CSV exactly as delivered (all columns; only empty fields are missing)."""
     source_path = Path(source_path)
     if not source_path.exists():
         raise FileNotFoundError(f"Spotify source not found: {source_path}")
 
-    df = pd.read_csv(source_path)
+    df = read_csv_exact(source_path)
     if df.shape[1] == 1:
         raise ValueError("Spotify CSV parsed into a single column: unexpected delimiter.")
 
@@ -96,4 +107,4 @@ def extract_grammys(run_id: str) -> dict:
 
 def read_raw(extract_result: dict) -> pd.DataFrame:
     """Load a raw working file produced by extract_spotify / extract_grammys."""
-    return pd.read_csv(extract_result["path"])
+    return read_csv_exact(extract_result["path"])

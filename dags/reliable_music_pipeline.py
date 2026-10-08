@@ -1,14 +1,15 @@
 """
 Resonance Records - reliable batch pipeline (Airflow 3.1.8, TaskFlow API).
 
-Current scope (README sections 6.7 and 6.8):
+Current scope (README sections 6.7 to 6.9):
 
     extract_spotify -> validate_spotify_raw --\
-                                               >-- transform_and_integrate
+                                               >-- transform_and_integrate -> validate_prepared
     extract_grammys -> validate_grammys_raw --/
 
 transform_and_integrate runs only when BOTH raw gates let their batch continue, and it reads
-exactly the batches that were validated.
+exactly the batches that were validated. validate_prepared is the second mandatory gate:
+load_dw (section 6.10) will run only if it has no critical failure.
 
 The DAG only orchestrates. Business logic lives in src/ (extract.py, validation.py).
 Heavy libraries (pandas, Great Expectations) are imported inside tasks so the DAG file
@@ -60,6 +61,12 @@ def _raw_gate(extract_result: dict) -> dict:
             type="string",
             description="Spotify CSV to extract. Change it only for controlled-failure tests.",
         ),
+        "prepared_fault": Param(
+            "none",
+            type="string",
+            enum=["none", "duplicate_track"],
+            description="TEST-ONLY: inject a controlled prepared-data failure (DQ14) in memory.",
+        ),
     },
     tags=["etl", "great-expectations", "resonance-records"],
 )
@@ -104,9 +111,27 @@ def reliable_music_pipeline():
         log.info("Prepared tables: %s | metrics: %s", result["table_rows"], result["metrics_path"])
         return result
 
+    # ------------------------------------------------------------------ prepared gate
+    @task(task_id="validate_prepared")
+    def validate_prepared(transform_result: dict) -> dict:
+        """Second gate: a critical failure fails the task WITHOUT retries and blocks load_dw."""
+        from src.validation import CriticalQualityFailure, validate_prepared_batch
+
+        context = get_current_context()
+        try:
+            summary = validate_prepared_batch(transform_result, context["run_id"],
+                                              fault=context["params"]["prepared_fault"])
+        except CriticalQualityFailure as exc:
+            raise AirflowFailException(str(exc)) from exc
+
+        log.info("Decision: %s | failed rules: %s | evidence: %s",
+                 summary["policy_decision"], summary["failed_rules"], summary["results_file"])
+        return {"policy_decision": summary["policy_decision"], "failed_rules": summary["failed_rules"],
+                "results_file": summary["results_file"], "tables": transform_result["tables"]}
+
     spotify_ok = validate_spotify_raw(extract_spotify_task())
     grammy_ok = validate_grammys_raw(extract_grammys_task())
-    transform_and_integrate(spotify_ok, grammy_ok)
+    validate_prepared(transform_and_integrate(spotify_ok, grammy_ok))
 
 
 reliable_music_pipeline()

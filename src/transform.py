@@ -558,7 +558,9 @@ def run_transform(spotify_batch: dict, grammy_batch: dict, run_id: str) -> dict:
     data/work/<run_id>/prepared/ and the transformation evidence to docs/evidence/transform/<run_id>/.
     Returns only paths and counts (XCom-safe).
     """
-    model = build_model(pd.read_csv(spotify_batch["path"]), pd.read_csv(grammy_batch["path"]))
+    from src.extract import read_csv_exact
+
+    model = build_model(read_csv_exact(spotify_batch["path"]), read_csv_exact(grammy_batch["path"]))
 
     safe = _safe_run_id(run_id)
     prepared_dir = DATA_DIR / "work" / safe / "prepared"

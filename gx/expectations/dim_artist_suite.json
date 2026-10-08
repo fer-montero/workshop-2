@@ -1,7 +1,30 @@
 {
   "name": "dim_artist_suite",
-  "id": "405cd530-fa7b-4d67-be52-b667501462a3",
+  "id": "b35a3c70-965b-4e8f-aa60-0f91988afac2",
   "expectations": [
+    {
+      "type": "expect_table_columns_to_match_set",
+      "kwargs": {
+        "column_set": [
+          "artist_key",
+          "artist_name",
+          "artist_norm",
+          "in_grammy",
+          "in_spotify",
+          "total_awards",
+          "track_count",
+          "avg_popularity",
+          "max_popularity",
+          "segment",
+          "popularity_zero"
+        ]
+      },
+      "meta": {
+        "rule_id": "DQ19"
+      },
+      "id": "7ff20390-ad64-4cc5-a483-962cce74063f",
+      "severity": "critical"
+    },
     {
       "type": "expect_column_values_to_not_be_null",
       "kwargs": {
@@ -10,7 +33,7 @@
       "meta": {
         "rule_id": "DQ15"
       },
-      "id": "36653b4a-4561-4eb3-b524-892031e4ea89",
+      "id": "890ced0e-0a6d-40bc-90d9-dd975c0bbd52",
       "severity": "critical"
     },
     {
@@ -21,7 +44,7 @@
       "meta": {
         "rule_id": "DQ15"
       },
-      "id": "95d6c55e-5aec-4a69-a583-5afe37980e41",
+      "id": "11014048-e1a7-4e9c-868a-990104ed9636",
       "severity": "critical"
     },
     {
@@ -33,7 +56,7 @@
       "meta": {
         "rule_id": "DQ15"
       },
-      "id": "34db3edd-9573-4334-8e17-ad06b5ba2775",
+      "id": "c4c13044-4fcc-4c3d-b19e-a18699bede45",
       "severity": "critical"
     },
     {
@@ -45,7 +68,7 @@
       "meta": {
         "rule_id": "DQ15"
       },
-      "id": "5613ea88-7860-4a4b-9daa-d733bd1c6d77",
+      "id": "cfaa618f-c1c3-4c6a-8bb6-327bea1f61e4",
       "severity": "critical"
     },
     {
@@ -61,7 +84,7 @@
       "meta": {
         "rule_id": "DQ17"
       },
-      "id": "b4a5d13b-a15f-489a-94af-9075aab8cef8",
+      "id": "d38db534-0906-4fca-ba14-8f8fc04118ad",
       "severity": "critical"
     },
     {
@@ -79,7 +102,22 @@
       "meta": {
         "rule_id": "DQ18"
       },
-      "id": "beb0557d-7894-4bee-b585-ab725ff4f39c",
+      "id": "68b458c0-4e34-42c4-814c-8ae3510f7b79",
+      "severity": "warning"
+    },
+    {
+      "type": "expect_column_distinct_values_to_contain_set",
+      "kwargs": {
+        "column": "segment",
+        "value_set": [
+          "candidato",
+          "consolidado"
+        ]
+      },
+      "meta": {
+        "rule_id": "DQ22"
+      },
+      "id": "9ae15f12-56fa-4368-8efb-8d951e0ba488",
       "severity": "warning"
     }
   ],

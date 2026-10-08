@@ -1,0 +1,422 @@
+{
+  "run_id": "manual__2026-10-08T02:04:02.763195+00:00",
+  "stage": "spotify_raw",
+  "executed_at_utc": "2026-10-08T02:04:28.264968+00:00",
+  "evaluated_batch": {
+    "path": "/opt/airflow/data/work/manual__2026-10-08T02_04_02.763195_00_00/spotify_raw.csv",
+    "metadata_path": "/opt/airflow/data/work/manual__2026-10-08T02_04_02.763195_00_00/spotify_raw_metadata.json",
+    "rows_extracted": 114000
+  },
+  "overall_success": true,
+  "policy_decision": "PASS",
+  "failed_rules": {
+    "critical": [],
+    "warning": [],
+    "info": []
+  },
+  "objects": {
+    "spotify_raw": {
+      "suite": "spotify_raw_suite",
+      "layer": "raw",
+      "rows_validated": 114000,
+      "success": true,
+      "statistics": {
+        "evaluated_expectations": 21,
+        "successful_expectations": 21,
+        "unsuccessful_expectations": 0,
+        "success_percent": 100.0
+      }
+    }
+  },
+  "results_file": "/opt/airflow/docs/evidence/gx/manual__2026-10-08T02_04_02.763195_00_00/spotify_raw.json",
+  "rule_results": [
+    {
+      "rule_id": "DQ01",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_to_exist",
+      "kwargs": {
+        "column": "track_id"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ02",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "track_id"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 114000,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ01",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_to_exist",
+      "kwargs": {
+        "column": "artists"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ07",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "artists",
+        "mostly": 0.99
+      },
+      "severity": "warning",
+      "success": true,
+      "observed_value": null,
+      "element_count": 114000,
+      "unexpected_count": 1,
+      "unexpected_percent": 0.0008771929824561403,
+      "partial_unexpected_list": [
+        null
+      ],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ01",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_to_exist",
+      "kwargs": {
+        "column": "popularity"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ03",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "popularity"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 114000,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ03",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "popularity",
+        "min_value": 0.0,
+        "max_value": 100.0
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 114000,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ08",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "popularity",
+        "mostly": 0.8,
+        "min_value": 1.0,
+        "max_value": 100.0
+      },
+      "severity": "info",
+      "success": true,
+      "observed_value": null,
+      "element_count": 114000,
+      "unexpected_count": 16020,
+      "unexpected_percent": 14.05263157894737,
+      "partial_unexpected_list": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ01",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_to_exist",
+      "kwargs": {
+        "column": "explicit"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ05",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "explicit",
+        "value_set": [
+          true,
+          false
+        ]
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 114000,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ01",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_to_exist",
+      "kwargs": {
+        "column": "track_genre"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ06",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "track_genre"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 114000,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ01",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_to_exist",
+      "kwargs": {
+        "column": "energy"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ04",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "energy",
+        "min_value": 0.0,
+        "max_value": 1.0
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 114000,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ01",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_to_exist",
+      "kwargs": {
+        "column": "valence"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ04",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "valence",
+        "min_value": 0.0,
+        "max_value": 1.0
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 114000,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ01",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_to_exist",
+      "kwargs": {
+        "column": "danceability"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ04",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "danceability",
+        "min_value": 0.0,
+        "max_value": 1.0
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 114000,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ01",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_to_exist",
+      "kwargs": {
+        "column": "acousticness"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ04",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "acousticness",
+        "min_value": 0.0,
+        "max_value": 1.0
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 114000,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ01",
+      "data_object": "spotify_raw",
+      "suite": "spotify_raw_suite",
+      "expectation": "expect_table_row_count_to_be_between",
+      "kwargs": {
+        "min_value": 1
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": 114000,
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    }
+  ]
+}

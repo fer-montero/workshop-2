@@ -1,7 +1,22 @@
 {
   "name": "dim_genre_suite",
-  "id": "d7d036e1-c92f-47ee-95cf-8796746c21e9",
+  "id": "279e7fa3-14f2-476d-b810-42d113c5105d",
   "expectations": [
+    {
+      "type": "expect_table_columns_to_match_set",
+      "kwargs": {
+        "column_set": [
+          "genre_key",
+          "genre",
+          "genre_family"
+        ]
+      },
+      "meta": {
+        "rule_id": "DQ19"
+      },
+      "id": "89eb5eb1-1fe9-4619-9acb-172ba7215ade",
+      "severity": "critical"
+    },
     {
       "type": "expect_column_values_to_not_be_null",
       "kwargs": {
@@ -10,7 +25,7 @@
       "meta": {
         "rule_id": "DQ16"
       },
-      "id": "06ce3f0a-91de-4615-88f5-78b92660afde",
+      "id": "eab98ca8-4c7b-43d2-9a7a-fdf50a2de34b",
       "severity": "critical"
     },
     {
@@ -35,7 +50,7 @@
       "meta": {
         "rule_id": "DQ16"
       },
-      "id": "e7175cea-f9e0-40c3-9452-278cebffae1b",
+      "id": "cbe49556-b0f2-4146-b07e-5e5f7445262e",
       "severity": "critical"
     }
   ],

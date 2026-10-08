@@ -18,7 +18,7 @@ try:
 except ImportError:
     GENRE_FAMILIES = None
 
-objects = ["spotify_raw", "grammy_raw", "fact_track", "dim_artist"]
+objects = ["spotify_raw", "grammy_raw", "fact_track", "fact_award", "dim_artist"]
 if GENRE_FAMILIES:
     objects.append("dim_genre")
 

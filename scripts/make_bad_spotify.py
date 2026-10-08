@@ -9,12 +9,16 @@ Violated rule: DQ03 (popularity between 0 and 100, Critical).
 """
 from pathlib import Path
 
-import pandas as pd
+import sys
+
+sys.path.insert(0, "/opt/airflow")
+
+from src.extract import read_csv_exact  # noqa: E402
 
 SOURCE = Path("/opt/airflow/data/raw/spotify_dataset.csv")
 TARGET = Path("/opt/airflow/data/test/spotify_bad_popularity.csv")
 
-df = pd.read_csv(SOURCE)
+df = read_csv_exact(SOURCE)
 original = df.loc[df.index[0], "popularity"]
 df.loc[df.index[0], "popularity"] = 150
 

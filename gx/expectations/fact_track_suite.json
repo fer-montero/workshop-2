@@ -1,7 +1,27 @@
 {
   "name": "fact_track_suite",
-  "id": "cfb8ff1f-564d-45dd-a3ba-8557a98f6476",
+  "id": "2412a4d8-609f-4344-9f02-0982a51124c5",
   "expectations": [
+    {
+      "type": "expect_table_columns_to_match_set",
+      "kwargs": {
+        "column_set": [
+          "track_key",
+          "track_id",
+          "popularity",
+          "energy",
+          "valence",
+          "danceability",
+          "acousticness",
+          "is_explicit"
+        ]
+      },
+      "meta": {
+        "rule_id": "DQ19"
+      },
+      "id": "60d10ba7-fbcc-47c9-9b8c-04858731a953",
+      "severity": "critical"
+    },
     {
       "type": "expect_column_values_to_not_be_null",
       "kwargs": {
@@ -10,7 +30,7 @@
       "meta": {
         "rule_id": "DQ14"
       },
-      "id": "c08daa7f-09fd-48b1-9386-ab566e270f93",
+      "id": "4a922d16-a9f8-402b-9a84-7698f2d36e26",
       "severity": "critical"
     },
     {
@@ -21,7 +41,142 @@
       "meta": {
         "rule_id": "DQ14"
       },
-      "id": "6012c251-bcee-44c1-a75b-ac84ead1553b",
+      "id": "89df7100-3ebe-4d71-96de-4a225fd3ba6b",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "popularity"
+      },
+      "meta": {
+        "rule_id": "DQ20"
+      },
+      "id": "30f54e02-8c73-4e7d-9c44-af1e062daf11",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "popularity",
+        "min_value": 0.0,
+        "max_value": 100.0
+      },
+      "meta": {
+        "rule_id": "DQ20"
+      },
+      "id": "aad07a8c-2df3-458d-8658-1ec5e707c46e",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "is_explicit",
+        "value_set": [
+          0,
+          1
+        ]
+      },
+      "meta": {
+        "rule_id": "DQ20"
+      },
+      "id": "9fcb6e2a-225c-4a74-b9e3-453bfd7b996e",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "energy"
+      },
+      "meta": {
+        "rule_id": "DQ20"
+      },
+      "id": "0c22f71f-5580-49bf-a219-1fe2e55c7ff2",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "energy",
+        "min_value": 0.0,
+        "max_value": 1.0
+      },
+      "meta": {
+        "rule_id": "DQ20"
+      },
+      "id": "b1303728-f3fb-4986-9644-d7f8778d3bea",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "valence"
+      },
+      "meta": {
+        "rule_id": "DQ20"
+      },
+      "id": "050b3fa1-f34d-4f87-b52c-e2c8fe9090f0",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "valence",
+        "min_value": 0.0,
+        "max_value": 1.0
+      },
+      "meta": {
+        "rule_id": "DQ20"
+      },
+      "id": "77946534-fb56-487d-b3e6-9b39e05a1cfe",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "danceability"
+      },
+      "meta": {
+        "rule_id": "DQ20"
+      },
+      "id": "f76cca67-b261-415d-9a15-495aaf41fd5e",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "danceability",
+        "min_value": 0.0,
+        "max_value": 1.0
+      },
+      "meta": {
+        "rule_id": "DQ20"
+      },
+      "id": "f2326bc3-e600-40ad-9284-212afeb9df39",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "acousticness"
+      },
+      "meta": {
+        "rule_id": "DQ20"
+      },
+      "id": "dfe296f5-de5a-4f29-9f01-84613543dc6e",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "acousticness",
+        "min_value": 0.0,
+        "max_value": 1.0
+      },
+      "meta": {
+        "rule_id": "DQ20"
+      },
+      "id": "f40bc943-35ed-4076-900e-41b52cfe934a",
       "severity": "critical"
     }
   ],

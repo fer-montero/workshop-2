@@ -11,9 +11,10 @@ Design (README section 6.6):
 Data objects and suites:
     raw layer       spotify_raw  -> spotify_raw_suite   (DQ01-DQ08)
                     grammy_raw   -> grammy_raw_suite    (DQ09-DQ13)
-    prepared layer  fact_track   -> fact_track_suite    (DQ14)
-                    dim_artist   -> dim_artist_suite    (DQ15, DQ17, DQ18)
-                    dim_genre    -> dim_genre_suite     (DQ16)
+    prepared layer  fact_track   -> fact_track_suite    (DQ14, DQ19, DQ20)
+                    fact_award   -> fact_award_suite    (DQ19, DQ21)
+                    dim_artist   -> dim_artist_suite    (DQ15, DQ17, DQ18, DQ19, DQ22)
+                    dim_genre    -> dim_genre_suite     (DQ16, DQ19)
 
 Severity policy:
     critical -> blocks the downstream path (CriticalQualityFailure is raised)
@@ -49,6 +50,23 @@ GRAMMY_COLUMNS = ["year", "category", "artist"]
 AUDIO_FEATURES = ["energy", "valence", "danceability", "acousticness"]
 SEGMENTS = ["candidato", "consolidado", "no aplica"]
 UNKNOWN_ARTIST_KEY = 0
+
+# DQ19 - expected prepared schema (exact columns of each model table)
+PREPARED_SCHEMA = {
+    "fact_track": ["track_key", "track_id", "popularity", "energy", "valence", "danceability",
+                   "acousticness", "is_explicit"],
+    "fact_award": ["award_key", "source_row_number", "artist_key", "category_key", "year_key",
+                   "award_count"],
+    "dim_artist": ["artist_key", "artist_name", "artist_norm", "in_grammy", "in_spotify",
+                   "total_awards", "track_count", "avg_popularity", "max_popularity", "segment",
+                   "popularity_zero"],
+    "dim_genre": ["genre_key", "genre", "genre_family"],
+}
+
+
+def _schema(table: str):
+    return _exp(gxe.ExpectTableColumnsToMatchSet, "DQ19", CRITICAL,
+                column_set=PREPARED_SCHEMA[table], exact_match=True)
 
 
 class CriticalQualityFailure(Exception):
@@ -104,14 +122,36 @@ def grammy_raw_expectations(current_year: int | None = None, **_):
 
 
 def fact_track_expectations(**_):
-    return [
+    exps = [
+        _schema("fact_track"),
         _exp(gxe.ExpectColumnValuesToNotBeNull, "DQ14", CRITICAL, column="track_id"),
         _exp(gxe.ExpectColumnValuesToBeUnique, "DQ14", CRITICAL, column="track_id"),
+        # DQ20 - measures still valid after transformation (S1 collapsed rows, S2 changed types)
+        _exp(gxe.ExpectColumnValuesToNotBeNull, "DQ20", CRITICAL, column="popularity"),
+        _exp(gxe.ExpectColumnValuesToBeBetween, "DQ20", CRITICAL, column="popularity",
+             min_value=0, max_value=100),
+        _exp(gxe.ExpectColumnValuesToBeInSet, "DQ20", CRITICAL, column="is_explicit", value_set=[0, 1]),
     ]
+    for col in AUDIO_FEATURES:
+        exps += [
+            _exp(gxe.ExpectColumnValuesToNotBeNull, "DQ20", CRITICAL, column=col),
+            _exp(gxe.ExpectColumnValuesToBeBetween, "DQ20", CRITICAL, column=col, min_value=0, max_value=1),
+        ]
+    return exps
+
+
+def fact_award_expectations(**_):
+    exps = [_schema("fact_award")]
+    # DQ21 - complete facts: every award has its keys; award_count is the additive unit (1)
+    exps += [_exp(gxe.ExpectColumnValuesToNotBeNull, "DQ21", CRITICAL, column=c)
+             for c in ("artist_key", "category_key", "year_key")]
+    exps.append(_exp(gxe.ExpectColumnValuesToBeInSet, "DQ21", CRITICAL, column="award_count", value_set=[1]))
+    return exps
 
 
 def dim_artist_expectations(**_):
     return [
+        _schema("dim_artist"),
         _exp(gxe.ExpectColumnValuesToNotBeNull, "DQ15", CRITICAL, column="artist_norm"),
         _exp(gxe.ExpectColumnValuesToBeUnique, "DQ15", CRITICAL, column="artist_norm"),
         # Normalized: no upper-case letters and no leading/trailing spaces
@@ -125,6 +165,9 @@ def dim_artist_expectations(**_):
         _exp(gxe.ExpectColumnMeanToBeBetween, "DQ18", WARNING, column="in_spotify",
              min_value=0.25, max_value=1.0, condition_parser="pandas",
              row_condition=f"in_grammy == True and artist_key != {UNKNOWN_ARTIST_KEY}"),
+        # DQ22 - analytical readiness: AR1 needs candidates, AR3 needs consolidated artists
+        _exp(gxe.ExpectColumnDistinctValuesToContainSet, "DQ22", WARNING, column="segment",
+             value_set=["candidato", "consolidado"]),
     ]
 
 
@@ -132,6 +175,7 @@ def dim_genre_expectations(genre_families: list[str] | None = None, **_):
     if not genre_families:
         raise ValueError("dim_genre_suite needs the genre family catalog (genre_families=...).")
     return [
+        _schema("dim_genre"),
         _exp(gxe.ExpectColumnValuesToNotBeNull, "DQ16", CRITICAL, column="genre_family"),
         _exp(gxe.ExpectColumnValuesToBeInSet, "DQ16", CRITICAL, column="genre_family",
              value_set=list(genre_families)),
@@ -143,6 +187,7 @@ VALIDATION_TARGETS = {
     "spotify_raw": ("spotify_raw_suite", "raw", spotify_raw_expectations),
     "grammy_raw": ("grammy_raw_suite", "raw", grammy_raw_expectations),
     "fact_track": ("fact_track_suite", "prepared", fact_track_expectations),
+    "fact_award": ("fact_award_suite", "prepared", fact_award_expectations),
     "dim_artist": ("dim_artist_suite", "prepared", dim_artist_expectations),
     "dim_genre": ("dim_genre_suite", "prepared", dim_genre_expectations),
 }
@@ -323,7 +368,9 @@ def validate_raw_batch(extract_result: dict, run_id: str) -> dict:
     if dataset not in RAW_DATASETS:
         raise ValueError(f"Unknown raw dataset: {dataset}")
 
-    dataframe = pd.read_csv(extract_result["path"])
+    from src.extract import read_csv_exact
+
+    dataframe = read_csv_exact(extract_result["path"])
     batch_info = {
         "path": extract_result["path"],
         "metadata_path": extract_result.get("metadata_path"),
@@ -336,6 +383,48 @@ def validate_raw_batch(extract_result: dict, run_id: str) -> dict:
         )
 
     summary = run_validation({dataset: dataframe}, stage=dataset, run_id=run_id, batch_info=batch_info)
+    enforce_severity_policy(summary)
+    return summary
+
+
+# ---------------------------------------------------------------------------
+# Prepared validation gate (README section 6.9)
+# ---------------------------------------------------------------------------
+PREPARED_OBJECTS = ("fact_track", "fact_award", "dim_artist", "dim_genre")
+PREPARED_FAULTS = ("none", "duplicate_track")
+
+
+def validate_prepared_batch(transform_result: dict, run_id: str, fault: str = "none") -> dict:
+    """
+    Prepared validation gate: "Did transformation produce data suitable for loading?"
+
+    Validates the prepared tables written by transform_and_integrate with their prepared
+    suites, persists the evidence and applies the severity policy (critical -> raise).
+
+    fault: TEST-ONLY controlled failure injection (default "none").
+           "duplicate_track" duplicates one fact_track row IN MEMORY to prove that DQ14
+           (critical) blocks load_dw. The prepared files on disk are never modified.
+    """
+    import pandas as pd
+
+    from src.transform import GENRE_FAMILIES
+
+    if fault not in PREPARED_FAULTS:
+        raise ValueError(f"Unknown prepared fault: {fault}. Allowed: {PREPARED_FAULTS}")
+
+    from src.extract import read_csv_exact
+
+    tables = {name: read_csv_exact(transform_result["tables"][name]) for name in PREPARED_OBJECTS}
+    if fault == "duplicate_track":
+        log.warning("TEST-ONLY fault injection: duplicating one fact_track row in memory")
+        tables["fact_track"] = pd.concat([tables["fact_track"], tables["fact_track"].head(1)],
+                                         ignore_index=True)
+
+    batch_info = {"prepared_dir": transform_result["prepared_dir"],
+                  "rows": {k: int(len(v)) for k, v in tables.items()},
+                  "injected_fault": fault}
+    summary = run_validation(tables, stage="prepared", run_id=run_id, batch_info=batch_info,
+                             genre_families=GENRE_FAMILIES)
     enforce_severity_policy(summary)
     return summary
 

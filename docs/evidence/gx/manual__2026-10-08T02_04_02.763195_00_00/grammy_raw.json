@@ -1,0 +1,224 @@
+{
+  "run_id": "manual__2026-10-08T02:04:02.763195+00:00",
+  "stage": "grammy_raw",
+  "executed_at_utc": "2026-10-08T02:04:21.443198+00:00",
+  "evaluated_batch": {
+    "path": "/opt/airflow/data/work/manual__2026-10-08T02_04_02.763195_00_00/grammy_raw.csv",
+    "metadata_path": "/opt/airflow/data/work/manual__2026-10-08T02_04_02.763195_00_00/grammy_raw_metadata.json",
+    "rows_extracted": 4810
+  },
+  "overall_success": false,
+  "policy_decision": "PASS_WITH_FINDINGS",
+  "failed_rules": {
+    "critical": [],
+    "warning": [],
+    "info": [
+      "DQ13"
+    ]
+  },
+  "objects": {
+    "grammy_raw": {
+      "suite": "grammy_raw_suite",
+      "layer": "raw",
+      "rows_validated": 4810,
+      "success": false,
+      "statistics": {
+        "evaluated_expectations": 9,
+        "successful_expectations": 8,
+        "unsuccessful_expectations": 1,
+        "success_percent": 88.88888888888889
+      }
+    }
+  },
+  "results_file": "/opt/airflow/docs/evidence/gx/manual__2026-10-08T02_04_02.763195_00_00/grammy_raw.json",
+  "rule_results": [
+    {
+      "rule_id": "DQ09",
+      "data_object": "grammy_raw",
+      "suite": "grammy_raw_suite",
+      "expectation": "expect_column_to_exist",
+      "kwargs": {
+        "column": "year"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ10",
+      "data_object": "grammy_raw",
+      "suite": "grammy_raw_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "year"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 4810,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ10",
+      "data_object": "grammy_raw",
+      "suite": "grammy_raw_suite",
+      "expectation": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "year",
+        "min_value": 1958.0,
+        "max_value": 2026.0
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 4810,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ09",
+      "data_object": "grammy_raw",
+      "suite": "grammy_raw_suite",
+      "expectation": "expect_column_to_exist",
+      "kwargs": {
+        "column": "category"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ11",
+      "data_object": "grammy_raw",
+      "suite": "grammy_raw_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "category"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 4810,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ09",
+      "data_object": "grammy_raw",
+      "suite": "grammy_raw_suite",
+      "expectation": "expect_column_to_exist",
+      "kwargs": {
+        "column": "artist"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ12",
+      "data_object": "grammy_raw",
+      "suite": "grammy_raw_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "artist",
+        "mostly": 0.6
+      },
+      "severity": "warning",
+      "success": true,
+      "observed_value": null,
+      "element_count": 4810,
+      "unexpected_count": 1840,
+      "unexpected_percent": 38.25363825363826,
+      "partial_unexpected_list": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ09",
+      "data_object": "grammy_raw",
+      "suite": "grammy_raw_suite",
+      "expectation": "expect_table_row_count_to_be_between",
+      "kwargs": {
+        "min_value": 1
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": 4810,
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ13",
+      "data_object": "grammy_raw",
+      "suite": "grammy_raw_suite",
+      "expectation": "expect_compound_columns_to_be_unique",
+      "kwargs": {
+        "column_list": [
+          "year",
+          "category",
+          "artist"
+        ],
+        "ignore_row_if": "any_value_is_missing"
+      },
+      "severity": "info",
+      "success": false,
+      "observed_value": null,
+      "element_count": 4810,
+      "unexpected_count": 3,
+      "unexpected_percent": 0.10101010101010101,
+      "partial_unexpected_list": [
+        {
+          "year": 2019,
+          "category": "Best Compilation Soundtrack For Visual Media",
+          "artist": "(Various Artists)"
+        },
+        {
+          "year": 2019,
+          "category": "Best Compilation Soundtrack For Visual Media",
+          "artist": "(Various Artists)"
+        },
+        {
+          "year": 2019,
+          "category": "Best Compilation Soundtrack For Visual Media",
+          "artist": "(Various Artists)"
+        }
+      ],
+      "raised_exception": false
+    }
+  ]
+}

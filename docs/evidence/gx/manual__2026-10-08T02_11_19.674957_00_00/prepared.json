@@ -1,0 +1,698 @@
+{
+  "run_id": "manual__2026-10-08T02:11:19.674957+00:00",
+  "stage": "prepared",
+  "executed_at_utc": "2026-10-08T02:12:13.987433+00:00",
+  "evaluated_batch": {
+    "prepared_dir": "/opt/airflow/data/work/manual__2026-10-08T02_11_19.674957_00_00/prepared",
+    "rows": {
+      "fact_track": 89741,
+      "fact_award": 5012,
+      "dim_artist": 30784,
+      "dim_genre": 114
+    },
+    "injected_fault": "none"
+  },
+  "overall_success": true,
+  "policy_decision": "PASS",
+  "failed_rules": {
+    "critical": [],
+    "warning": [],
+    "info": []
+  },
+  "objects": {
+    "fact_track": {
+      "suite": "fact_track_suite",
+      "layer": "prepared",
+      "rows_validated": 89741,
+      "success": true,
+      "statistics": {
+        "evaluated_expectations": 14,
+        "successful_expectations": 14,
+        "unsuccessful_expectations": 0,
+        "success_percent": 100.0
+      }
+    },
+    "fact_award": {
+      "suite": "fact_award_suite",
+      "layer": "prepared",
+      "rows_validated": 5012,
+      "success": true,
+      "statistics": {
+        "evaluated_expectations": 5,
+        "successful_expectations": 5,
+        "unsuccessful_expectations": 0,
+        "success_percent": 100.0
+      }
+    },
+    "dim_artist": {
+      "suite": "dim_artist_suite",
+      "layer": "prepared",
+      "rows_validated": 30784,
+      "success": true,
+      "statistics": {
+        "evaluated_expectations": 8,
+        "successful_expectations": 8,
+        "unsuccessful_expectations": 0,
+        "success_percent": 100.0
+      }
+    },
+    "dim_genre": {
+      "suite": "dim_genre_suite",
+      "layer": "prepared",
+      "rows_validated": 114,
+      "success": true,
+      "statistics": {
+        "evaluated_expectations": 3,
+        "successful_expectations": 3,
+        "unsuccessful_expectations": 0,
+        "success_percent": 100.0
+      }
+    }
+  },
+  "results_file": "/opt/airflow/docs/evidence/gx/manual__2026-10-08T02_11_19.674957_00_00/prepared.json",
+  "rule_results": [
+    {
+      "rule_id": "DQ19",
+      "data_object": "fact_track",
+      "suite": "fact_track_suite",
+      "expectation": "expect_table_columns_to_match_set",
+      "kwargs": {
+        "column_set": [
+          "track_key",
+          "track_id",
+          "popularity",
+          "energy",
+          "valence",
+          "danceability",
+          "acousticness",
+          "is_explicit"
+        ]
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": [
+        "acousticness",
+        "danceability",
+        "energy",
+        "is_explicit",
+        "popularity",
+        "track_id",
+        "track_key",
+        "valence"
+      ],
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ14",
+      "data_object": "fact_track",
+      "suite": "fact_track_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "track_id"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 89741,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ14",
+      "data_object": "fact_track",
+      "suite": "fact_track_suite",
+      "expectation": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "track_id"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 89741,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ20",
+      "data_object": "fact_track",
+      "suite": "fact_track_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "popularity"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 89741,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ20",
+      "data_object": "fact_track",
+      "suite": "fact_track_suite",
+      "expectation": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "popularity",
+        "min_value": 0.0,
+        "max_value": 100.0
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 89741,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ20",
+      "data_object": "fact_track",
+      "suite": "fact_track_suite",
+      "expectation": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "is_explicit",
+        "value_set": [
+          0,
+          1
+        ]
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 89741,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ20",
+      "data_object": "fact_track",
+      "suite": "fact_track_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "energy"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 89741,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ20",
+      "data_object": "fact_track",
+      "suite": "fact_track_suite",
+      "expectation": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "energy",
+        "min_value": 0.0,
+        "max_value": 1.0
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 89741,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ20",
+      "data_object": "fact_track",
+      "suite": "fact_track_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "valence"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 89741,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ20",
+      "data_object": "fact_track",
+      "suite": "fact_track_suite",
+      "expectation": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "valence",
+        "min_value": 0.0,
+        "max_value": 1.0
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 89741,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ20",
+      "data_object": "fact_track",
+      "suite": "fact_track_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "danceability"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 89741,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ20",
+      "data_object": "fact_track",
+      "suite": "fact_track_suite",
+      "expectation": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "danceability",
+        "min_value": 0.0,
+        "max_value": 1.0
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 89741,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ20",
+      "data_object": "fact_track",
+      "suite": "fact_track_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "acousticness"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 89741,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ20",
+      "data_object": "fact_track",
+      "suite": "fact_track_suite",
+      "expectation": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "acousticness",
+        "min_value": 0.0,
+        "max_value": 1.0
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 89741,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ19",
+      "data_object": "fact_award",
+      "suite": "fact_award_suite",
+      "expectation": "expect_table_columns_to_match_set",
+      "kwargs": {
+        "column_set": [
+          "award_key",
+          "source_row_number",
+          "artist_key",
+          "category_key",
+          "year_key",
+          "award_count"
+        ]
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": [
+        "artist_key",
+        "award_count",
+        "award_key",
+        "category_key",
+        "source_row_number",
+        "year_key"
+      ],
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ21",
+      "data_object": "fact_award",
+      "suite": "fact_award_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "artist_key"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 5012,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ21",
+      "data_object": "fact_award",
+      "suite": "fact_award_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "category_key"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 5012,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ21",
+      "data_object": "fact_award",
+      "suite": "fact_award_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "year_key"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 5012,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ21",
+      "data_object": "fact_award",
+      "suite": "fact_award_suite",
+      "expectation": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "award_count",
+        "value_set": [
+          1
+        ]
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 5012,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ19",
+      "data_object": "dim_artist",
+      "suite": "dim_artist_suite",
+      "expectation": "expect_table_columns_to_match_set",
+      "kwargs": {
+        "column_set": [
+          "artist_key",
+          "artist_name",
+          "artist_norm",
+          "in_grammy",
+          "in_spotify",
+          "total_awards",
+          "track_count",
+          "avg_popularity",
+          "max_popularity",
+          "segment",
+          "popularity_zero"
+        ]
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": [
+        "artist_key",
+        "artist_name",
+        "artist_norm",
+        "avg_popularity",
+        "in_grammy",
+        "in_spotify",
+        "max_popularity",
+        "popularity_zero",
+        "segment",
+        "total_awards",
+        "track_count"
+      ],
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ15",
+      "data_object": "dim_artist",
+      "suite": "dim_artist_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "artist_norm"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 30784,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ15",
+      "data_object": "dim_artist",
+      "suite": "dim_artist_suite",
+      "expectation": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "artist_norm"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 30784,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ15",
+      "data_object": "dim_artist",
+      "suite": "dim_artist_suite",
+      "expectation": "expect_column_values_to_match_regex",
+      "kwargs": {
+        "column": "artist_norm",
+        "regex": "^[^\\sA-Z](?:[^A-Z]*[^\\sA-Z])?$"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 30784,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ15",
+      "data_object": "dim_artist",
+      "suite": "dim_artist_suite",
+      "expectation": "expect_column_values_to_not_match_regex",
+      "kwargs": {
+        "column": "artist_norm",
+        "regex": "\\s{2,}"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 30784,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ17",
+      "data_object": "dim_artist",
+      "suite": "dim_artist_suite",
+      "expectation": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "segment",
+        "value_set": [
+          "candidato",
+          "consolidado",
+          "no aplica"
+        ]
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 30784,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ22",
+      "data_object": "dim_artist",
+      "suite": "dim_artist_suite",
+      "expectation": "expect_column_distinct_values_to_contain_set",
+      "kwargs": {
+        "column": "segment",
+        "value_set": [
+          "candidato",
+          "consolidado"
+        ]
+      },
+      "severity": "warning",
+      "success": true,
+      "observed_value": null,
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ18",
+      "data_object": "dim_artist",
+      "suite": "dim_artist_suite",
+      "expectation": "expect_column_mean_to_be_between",
+      "kwargs": {
+        "column": "in_spotify",
+        "row_condition": {
+          "pass_through_filter": "in_grammy == True and artist_key != 0",
+          "type": "pass_through"
+        },
+        "condition_parser": "pandas",
+        "min_value": 0.25,
+        "max_value": 1.0
+      },
+      "severity": "warning",
+      "success": true,
+      "observed_value": 0.3952205882352941,
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ19",
+      "data_object": "dim_genre",
+      "suite": "dim_genre_suite",
+      "expectation": "expect_table_columns_to_match_set",
+      "kwargs": {
+        "column_set": [
+          "genre_key",
+          "genre",
+          "genre_family"
+        ]
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": [
+        "genre",
+        "genre_family",
+        "genre_key"
+      ],
+      "element_count": null,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ16",
+      "data_object": "dim_genre",
+      "suite": "dim_genre_suite",
+      "expectation": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "genre_family"
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 114,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    },
+    {
+      "rule_id": "DQ16",
+      "data_object": "dim_genre",
+      "suite": "dim_genre_suite",
+      "expectation": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "genre_family",
+        "value_set": [
+          "Pop",
+          "Rock",
+          "Metal",
+          "Electrónica",
+          "Hip-hop, R&B y Soul",
+          "Latina",
+          "Reggae y Afro",
+          "Jazz y Blues",
+          "Country y Folk",
+          "Clásica e Instrumental",
+          "Regional / Internacional",
+          "Contexto y Ánimo"
+        ]
+      },
+      "severity": "critical",
+      "success": true,
+      "observed_value": null,
+      "element_count": 114,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": [],
+      "raised_exception": false
+    }
+  ]
+}

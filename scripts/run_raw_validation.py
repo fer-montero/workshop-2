@@ -20,6 +20,7 @@ import pandas as pd  # noqa: E402
 from sqlalchemy import text  # noqa: E402
 
 from src.db import source_engine  # noqa: E402
+from src.extract import read_csv_exact  # noqa: E402
 from src.validation import (  # noqa: E402
     GRAMMY_COLUMNS, SPOTIFY_COLUMNS, CriticalQualityFailure, enforce_severity_policy, run_validation,
 )
@@ -32,7 +33,7 @@ def main():
     parser.add_argument("--inject-failure", action="store_true")
     args = parser.parse_args()
 
-    spotify = pd.read_csv(SPOTIFY_PATH, usecols=SPOTIFY_COLUMNS)
+    spotify = read_csv_exact(SPOTIFY_PATH, usecols=SPOTIFY_COLUMNS)
     with source_engine().connect() as conn:
         grammy = pd.read_sql(text('SELECT "year", category, artist FROM grammy_awards'), conn)
 
