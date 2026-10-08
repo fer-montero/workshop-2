@@ -1,0 +1,46 @@
+{
+  "name": "dim_genre_suite",
+  "id": "d7d036e1-c92f-47ee-95cf-8796746c21e9",
+  "expectations": [
+    {
+      "type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "genre_family"
+      },
+      "meta": {
+        "rule_id": "DQ16"
+      },
+      "id": "06ce3f0a-91de-4615-88f5-78b92660afde",
+      "severity": "critical"
+    },
+    {
+      "type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "genre_family",
+        "value_set": [
+          "Pop",
+          "Rock",
+          "Metal",
+          "Electrónica",
+          "Hip-hop, R&B y Soul",
+          "Latina",
+          "Reggae y Afro",
+          "Jazz y Blues",
+          "Country y Folk",
+          "Clásica e Instrumental",
+          "Regional / Internacional",
+          "Contexto y Ánimo"
+        ]
+      },
+      "meta": {
+        "rule_id": "DQ16"
+      },
+      "id": "e7175cea-f9e0-40c3-9452-278cebffae1b",
+      "severity": "critical"
+    }
+  ],
+  "meta": {
+    "great_expectations_version": "1.23.1"
+  },
+  "notes": null
+}

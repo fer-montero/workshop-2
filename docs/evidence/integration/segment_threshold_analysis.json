@@ -1,0 +1,122 @@
+{
+  "artists_in_both_sources": 645,
+  "awards_distribution_both": {
+    "1": 335,
+    "2": 115,
+    "3": 64,
+    "4": 34,
+    "5-9": 78,
+    "10+": 19
+  },
+  "awards_percentiles_both": {
+    "p10": 1.0,
+    "p25": 1.0,
+    "p50": 1.0,
+    "p75": 3.0,
+    "p90": 6.0
+  },
+  "avg_popularity_percentiles": {
+    "both": {
+      "p10": 0.5,
+      "p25": 19.5,
+      "p50": 34.3,
+      "p75": 54.1,
+      "p90": 67.1
+    },
+    "catalog": {
+      "p10": 13.0,
+      "p25": 22.5,
+      "p50": 36.0,
+      "p75": 48.0,
+      "p90": 58.0
+    }
+  },
+  "max_popularity_percentiles": {
+    "both": {
+      "p10": 1.0,
+      "p25": 33.0,
+      "p50": 65.0,
+      "p75": 76.0,
+      "p90": 83.0
+    },
+    "catalog": {
+      "p10": 17.0,
+      "p25": 25.0,
+      "p50": 41.0,
+      "p75": 55.0,
+      "p90": 65.0
+    }
+  },
+  "quartile_rule_proposal": {
+    "measure": "max_popularity",
+    "min_awards (p75 awards, both sources)": 3,
+    "candidate_below (p25 max popularity, catalog)": 25.0,
+    "consolidated_from (p50 max popularity, catalog)": 41.0,
+    "candidates": 33,
+    "consolidated": 151,
+    "middle_band": 11,
+    "candidates_with_all_tracks_at_zero": 15
+  },
+  "sensitivity_max_popularity": [
+    {
+      "min_awards": 2,
+      "max_popularity_below": 15,
+      "candidates": 38
+    },
+    {
+      "min_awards": 2,
+      "max_popularity_below": 20,
+      "candidates": 44
+    },
+    {
+      "min_awards": 2,
+      "max_popularity_below": 25,
+      "candidates": 55
+    },
+    {
+      "min_awards": 2,
+      "max_popularity_below": 30,
+      "candidates": 67
+    },
+    {
+      "min_awards": 3,
+      "max_popularity_below": 15,
+      "candidates": 25
+    },
+    {
+      "min_awards": 3,
+      "max_popularity_below": 20,
+      "candidates": 27
+    },
+    {
+      "min_awards": 3,
+      "max_popularity_below": 25,
+      "candidates": 33
+    },
+    {
+      "min_awards": 3,
+      "max_popularity_below": 30,
+      "candidates": 39
+    },
+    {
+      "min_awards": 5,
+      "max_popularity_below": 15,
+      "candidates": 16
+    },
+    {
+      "min_awards": 5,
+      "max_popularity_below": 20,
+      "candidates": 18
+    },
+    {
+      "min_awards": 5,
+      "max_popularity_below": 25,
+      "candidates": 21
+    },
+    {
+      "min_awards": 5,
+      "max_popularity_below": 30,
+      "candidates": 22
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "name": "grammy_raw_suite",
-  "id": "b97eee8f-a36c-4452-9372-db2ac97df3b6",
+  "id": "572149a6-32cd-4c15-8204-4053abfdfedb",
   "expectations": [
     {
       "type": "expect_column_to_exist",
@@ -10,7 +10,7 @@
       "meta": {
         "rule_id": "DQ09"
       },
-      "id": "b2f17ca5-7f90-4360-a9a0-df5759bf5cb7",
+      "id": "3a7b7470-f794-4ee3-9429-29c3ee3ad830",
       "severity": "critical"
     },
     {
@@ -21,7 +21,7 @@
       "meta": {
         "rule_id": "DQ09"
       },
-      "id": "f14fe08d-7e8d-496d-b936-df88370499c2",
+      "id": "e5ae53e8-53c1-4ae0-8a1a-9396119b9efd",
       "severity": "critical"
     },
     {
@@ -32,7 +32,7 @@
       "meta": {
         "rule_id": "DQ09"
       },
-      "id": "c198a8b3-381b-4e5f-a861-ac9bebce7004",
+      "id": "e581709d-97a0-4457-8faa-e407db104a09",
       "severity": "critical"
     },
     {
@@ -43,7 +43,7 @@
       "meta": {
         "rule_id": "DQ09"
       },
-      "id": "34099813-f67e-4d2a-8f72-4bc4c2c98d3d",
+      "id": "1bd2180d-e710-43af-a0b4-66508fc53553",
       "severity": "critical"
     },
     {
@@ -54,7 +54,7 @@
       "meta": {
         "rule_id": "DQ10"
       },
-      "id": "ffa75ffb-0b88-412a-9ef5-1cc14a305fb7",
+      "id": "2505916b-0cbf-45b3-9821-d5d3a1b4522c",
       "severity": "critical"
     },
     {
@@ -67,7 +67,7 @@
       "meta": {
         "rule_id": "DQ10"
       },
-      "id": "c29ee90d-c6cc-4a77-a788-a3eeed8818b8",
+      "id": "60d4c6fa-7420-4ef8-bd13-477ce27eea1c",
       "severity": "critical"
     },
     {
@@ -78,7 +78,7 @@
       "meta": {
         "rule_id": "DQ11"
       },
-      "id": "ec8d4c4c-cb46-4396-ad03-fec26a7d06e2",
+      "id": "562d3760-28f3-4ed2-9dd3-ba3a79cc9399",
       "severity": "critical"
     },
     {
@@ -90,7 +90,7 @@
       "meta": {
         "rule_id": "DQ12"
       },
-      "id": "e5c8ee19-1e09-48f2-b265-74feab4a2a57",
+      "id": "107d79cd-6350-46aa-a8e6-02a17ab8b37a",
       "severity": "warning"
     },
     {
@@ -106,7 +106,7 @@
       "meta": {
         "rule_id": "DQ13"
       },
-      "id": "5f152731-9fea-4771-9dda-7668eeeea2b7",
+      "id": "2a1bdefa-7cd6-48c4-8c42-e2f05bdf5840",
       "severity": "info"
     }
   ],

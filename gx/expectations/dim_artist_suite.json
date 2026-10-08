@@ -1,6 +1,6 @@
 {
   "name": "dim_artist_suite",
-  "id": "5de21173-3cf5-4885-a0e2-3c35b100c22a",
+  "id": "405cd530-fa7b-4d67-be52-b667501462a3",
   "expectations": [
     {
       "type": "expect_column_values_to_not_be_null",
@@ -10,7 +10,7 @@
       "meta": {
         "rule_id": "DQ15"
       },
-      "id": "b267eb96-3c75-47f8-a419-4a8dbab6a5c4",
+      "id": "36653b4a-4561-4eb3-b524-892031e4ea89",
       "severity": "critical"
     },
     {
@@ -21,7 +21,7 @@
       "meta": {
         "rule_id": "DQ15"
       },
-      "id": "2ef4cd73-a8d7-4982-8d55-e549746cfcec",
+      "id": "95d6c55e-5aec-4a69-a583-5afe37980e41",
       "severity": "critical"
     },
     {
@@ -33,7 +33,7 @@
       "meta": {
         "rule_id": "DQ15"
       },
-      "id": "50c3d1bd-ad10-44fc-a3c2-85b4fbeb496d",
+      "id": "34db3edd-9573-4334-8e17-ad06b5ba2775",
       "severity": "critical"
     },
     {
@@ -45,7 +45,7 @@
       "meta": {
         "rule_id": "DQ15"
       },
-      "id": "5e0214a6-fbd8-4272-bede-e7190867299b",
+      "id": "5613ea88-7860-4a4b-9daa-d733bd1c6d77",
       "severity": "critical"
     },
     {
@@ -61,7 +61,7 @@
       "meta": {
         "rule_id": "DQ17"
       },
-      "id": "25b14d31-c851-4022-a527-1886e51ce31d",
+      "id": "b4a5d13b-a15f-489a-94af-9075aab8cef8",
       "severity": "critical"
     },
     {
@@ -79,7 +79,7 @@
       "meta": {
         "rule_id": "DQ18"
       },
-      "id": "052423a2-dafc-4a75-85d4-d021a55249a1",
+      "id": "beb0557d-7894-4bee-b585-ab725ff4f39c",
       "severity": "warning"
     }
   ],
