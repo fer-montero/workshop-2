@@ -7,13 +7,18 @@ Built step by step:
     Step 3 - Grammy: awards per credited artist, category type, unknown member      (done)
     Step 4 - Integration: conformed dim_artist and integration contract             (done)
     Step 5 - Segments (candidate / consolidated)                                    (done)
+    Step 6 - Assemble the dimensional model with surrogate keys + persist outputs   (done)
 
 Every transformation is a documented engineering rule, not a fix to make a validation pass.
 """
 from __future__ import annotations
 
+import json
+import os
 import re
 import unicodedata
+from datetime import datetime, timezone
+from pathlib import Path
 
 import pandas as pd
 
@@ -459,3 +464,120 @@ def assign_segments(dim_artist: pd.DataFrame) -> dict:
                                                             inclusive="left")).sum()),
     }
     return {"dim_artist": dim, "metrics": metrics}
+
+
+# ---------------------------------------------------------------------------
+# Step 6 - Assemble the dimensional model and persist the prepared batch
+# ---------------------------------------------------------------------------
+DATA_DIR = Path(os.environ.get("PIPELINE_DATA_DIR", "/opt/airflow/data"))
+EVIDENCE_DIR = Path(os.environ.get("TRANSFORM_EVIDENCE_DIR", "/opt/airflow/docs/evidence/transform"))
+MODEL_TABLES = ["dim_artist", "dim_genre", "dim_category", "dim_year",
+                "fact_track", "fact_award", "bridge_track_artist", "bridge_track_genre"]
+
+
+def _safe_run_id(run_id: str) -> str:
+    return re.sub(r"[^A-Za-z0-9_.-]", "_", run_id)
+
+
+def _sequential_key(df: pd.DataFrame, sort_by: list[str], key: str) -> pd.DataFrame:
+    """Rule K1 - deterministic surrogate keys: sort by the business key, number from 1."""
+    out = df.sort_values(sort_by, kind="mergesort").reset_index(drop=True)
+    out.insert(0, key, range(1, len(out) + 1))
+    return out
+
+
+def _map_fk(values: pd.Series, mapping: pd.Series, fk_name: str) -> pd.Series:
+    """Rule K2 - referential integrity: every foreign key must resolve, or the batch fails."""
+    mapped = values.map(mapping)
+    missing = values[mapped.isna()].unique()
+    if len(missing):
+        raise ValueError(f"Referential integrity broken for {fk_name}: {list(missing)[:10]}")
+    return mapped.astype(int)
+
+
+def build_model(spotify_raw: pd.DataFrame, grammy_raw: pd.DataFrame) -> dict:
+    """Run steps 1-5 and assemble the 8 tables of the star schema with their keys."""
+    spotify = prepare_spotify(spotify_raw)
+    genres = build_dim_genre(spotify["track_genres"])
+    grammy = prepare_grammys(grammy_raw)
+    integration = integrate(spotify, grammy)
+    segments = assign_segments(integration["dim_artist"])
+
+    dim_artist = segments["dim_artist"][[
+        "artist_key", "artist_name", "artist_norm", "in_grammy", "in_spotify", "total_awards",
+        "track_count", "avg_popularity", "max_popularity", "segment", "popularity_zero",
+    ]]
+    dim_genre = _sequential_key(genres["dim_genre"], ["genre"], "genre_key")
+    dim_category = _sequential_key(grammy["categories"], ["category_name"], "category_key")
+    dim_year = _sequential_key(grammy["years"], ["year"], "year_key")
+    fact_track = _sequential_key(spotify["tracks"], ["track_id"], "track_key")
+
+    artist_key = dim_artist.set_index("artist_norm")["artist_key"]
+    track_key = fact_track.set_index("track_id")["track_key"]
+
+    bridge_track_artist = pd.DataFrame({
+        "track_key": _map_fk(spotify["track_artists"]["track_id"], track_key, "bridge_track_artist.track_key"),
+        "artist_key": _map_fk(spotify["track_artists"]["artist_norm"], artist_key, "bridge_track_artist.artist_key"),
+    }).drop_duplicates().sort_values(["track_key", "artist_key"]).reset_index(drop=True)
+
+    bridge_track_genre = pd.DataFrame({
+        "track_key": _map_fk(spotify["track_genres"]["track_id"], track_key, "bridge_track_genre.track_key"),
+        "genre_key": _map_fk(spotify["track_genres"]["track_genre"],
+                             dim_genre.set_index("genre")["genre_key"], "bridge_track_genre.genre_key"),
+    }).drop_duplicates().sort_values(["track_key", "genre_key"]).reset_index(drop=True)
+
+    awards = integration["award_artists"]
+    fact_award = pd.DataFrame({
+        "source_row_number": awards["source_row_number"].astype(int),
+        "artist_key": _map_fk(awards["artist_norm"], artist_key, "fact_award.artist_key"),
+        "category_key": _map_fk(awards["category"], dim_category.set_index("category_name")["category_key"],
+                                "fact_award.category_key"),
+        "year_key": _map_fk(awards["year"], dim_year.set_index("year")["year_key"], "fact_award.year_key"),
+    })
+    fact_award["award_count"] = 1
+    fact_award = _sequential_key(fact_award, ["source_row_number", "artist_key"], "award_key")
+
+    tables = {
+        "dim_artist": dim_artist, "dim_genre": dim_genre, "dim_category": dim_category,
+        "dim_year": dim_year, "fact_track": fact_track, "fact_award": fact_award,
+        "bridge_track_artist": bridge_track_artist, "bridge_track_genre": bridge_track_genre,
+    }
+    metrics = {
+        "spotify": spotify["metrics"], "genres": genres["metrics"], "grammy": grammy["metrics"],
+        "integration": integration["metrics"], "segments": segments["metrics"],
+        "table_rows": {name: len(df) for name, df in tables.items()},
+        "awards_reconcile_with_source": int(fact_award["source_row_number"].nunique()) == len(grammy_raw),
+    }
+    return {"tables": tables, "unmatched": integration["unmatched"], "metrics": metrics}
+
+
+def run_transform(spotify_batch: dict, grammy_batch: dict, run_id: str) -> dict:
+    """
+    Pipeline entry point (task transform_and_integrate).
+    Reads the VALIDATED raw batches, builds the model, writes the prepared tables to
+    data/work/<run_id>/prepared/ and the transformation evidence to docs/evidence/transform/<run_id>/.
+    Returns only paths and counts (XCom-safe).
+    """
+    model = build_model(pd.read_csv(spotify_batch["path"]), pd.read_csv(grammy_batch["path"]))
+
+    safe = _safe_run_id(run_id)
+    prepared_dir = DATA_DIR / "work" / safe / "prepared"
+    evidence_dir = EVIDENCE_DIR / safe
+    prepared_dir.mkdir(parents=True, exist_ok=True)
+    evidence_dir.mkdir(parents=True, exist_ok=True)
+
+    paths = {}
+    for name, df in model["tables"].items():
+        path = prepared_dir / f"{name}.csv"
+        df.to_csv(path, index=False, encoding="utf-8")
+        paths[name] = str(path)
+
+    model["unmatched"].to_csv(evidence_dir / "unmatched_grammy_artists.csv", index=False, encoding="utf-8")
+    metrics = {"run_id": run_id, "executed_at_utc": datetime.now(timezone.utc).isoformat(),
+               "input_batches": {"spotify": spotify_batch["path"], "grammy": grammy_batch["path"]},
+               **model["metrics"]}
+    metrics_path = evidence_dir / "transform_metrics.json"
+    metrics_path.write_text(json.dumps(metrics, indent=2, ensure_ascii=False, default=str), encoding="utf-8")
+
+    return {"prepared_dir": str(prepared_dir), "tables": paths,
+            "table_rows": model["metrics"]["table_rows"], "metrics_path": str(metrics_path)}

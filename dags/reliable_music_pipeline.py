@@ -1,13 +1,14 @@
 """
 Resonance Records - reliable batch pipeline (Airflow 3.1.8, TaskFlow API).
 
-Current scope (README section 6.7): two independent source branches with raw validation gates.
+Current scope (README sections 6.7 and 6.8):
 
     extract_spotify -> validate_spotify_raw --\
-                                               >-- raw_gate_passed
+                                               >-- transform_and_integrate
     extract_grammys -> validate_grammys_raw --/
 
-raw_gate_passed is a temporary join point; it will be replaced by transform_and_integrate.
+transform_and_integrate runs only when BOTH raw gates let their batch continue, and it reads
+exactly the batches that were validated.
 
 The DAG only orchestrates. Business logic lives in src/ (extract.py, validation.py).
 Heavy libraries (pandas, Great Expectations) are imported inside tasks so the DAG file
@@ -40,7 +41,9 @@ def _raw_gate(extract_result: dict) -> dict:
 
     log.info("Decision: %s | failed rules: %s | evidence: %s",
              summary["policy_decision"], summary["failed_rules"], summary["results_file"])
-    return {k: summary[k] for k in ("stage", "policy_decision", "failed_rules", "results_file")}
+    out = {k: summary[k] for k in ("stage", "policy_decision", "failed_rules", "results_file")}
+    out["batch"] = extract_result  # the validated batch travels to the transformation
+    return out
 
 
 @dag(
@@ -88,20 +91,22 @@ def reliable_music_pipeline():
     def validate_grammys_raw(extract_result: dict) -> dict:
         return _raw_gate(extract_result)
 
-    # ------------------------------------------------------------------ temporary join
-    @task(task_id="raw_gate_passed")
-    def raw_gate_passed(spotify_summary: dict, grammy_summary: dict) -> dict:
-        """Runs only when BOTH raw gates allowed their batch to continue."""
-        decisions = {
-            "spotify_raw": spotify_summary["policy_decision"],
-            "grammy_raw": grammy_summary["policy_decision"],
-        }
-        log.info("Both raw gates passed: %s", decisions)
-        return decisions
+    # ------------------------------------------------------------------ transformation
+    @task(task_id="transform_and_integrate")
+    def transform_and_integrate(spotify_gate: dict, grammy_gate: dict) -> dict:
+        """Single transformation phase: cleaning, harmonization, integration, segments, keys."""
+        from src.transform import run_transform
+
+        log.info("Raw gate decisions: spotify=%s grammy=%s",
+                 spotify_gate["policy_decision"], grammy_gate["policy_decision"])
+        result = run_transform(spotify_gate["batch"], grammy_gate["batch"],
+                               get_current_context()["run_id"])
+        log.info("Prepared tables: %s | metrics: %s", result["table_rows"], result["metrics_path"])
+        return result
 
     spotify_ok = validate_spotify_raw(extract_spotify_task())
     grammy_ok = validate_grammys_raw(extract_grammys_task())
-    raw_gate_passed(spotify_ok, grammy_ok)
+    transform_and_integrate(spotify_ok, grammy_ok)
 
 
 reliable_music_pipeline()
