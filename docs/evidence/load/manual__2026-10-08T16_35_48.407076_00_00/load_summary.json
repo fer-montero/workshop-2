@@ -1,0 +1,67 @@
+{
+  "run_id": "manual__2026-10-08T16:35:48.407076+00:00",
+  "strategy": "transactional truncate-and-load",
+  "load_order": [
+    "dim_artist",
+    "dim_genre",
+    "dim_category",
+    "dim_year",
+    "fact_track",
+    "fact_award",
+    "bridge_track_artist",
+    "bridge_track_genre"
+  ],
+  "fault": "none",
+  "started_at_utc": "2026-10-08T16:37:24.214222+00:00",
+  "before": {
+    "table_rows": {
+      "dim_artist": 30784,
+      "dim_genre": 114,
+      "dim_category": 637,
+      "dim_year": 62,
+      "fact_track": 89741,
+      "fact_award": 5012,
+      "bridge_track_artist": 123424,
+      "bridge_track_genre": 113550
+    },
+    "measures": {
+      "total_awards": 5012.0,
+      "awards_unknown_artist": 1906.0,
+      "avg_track_popularity": 33.2072,
+      "candidate_artists": 33.0,
+      "consolidated_artists": 151.0
+    }
+  },
+  "after": {
+    "table_rows": {
+      "dim_artist": 30784,
+      "dim_genre": 114,
+      "dim_category": 637,
+      "dim_year": 62,
+      "fact_track": 89741,
+      "fact_award": 5012,
+      "bridge_track_artist": 123424,
+      "bridge_track_genre": 113550
+    },
+    "measures": {
+      "total_awards": 5012.0,
+      "awards_unknown_artist": 1906.0,
+      "avg_track_popularity": 33.2072,
+      "candidate_artists": 33.0,
+      "consolidated_artists": 151.0
+    }
+  },
+  "status": "COMMITTED",
+  "rows_loaded": {
+    "dim_artist": 30784,
+    "dim_genre": 114,
+    "dim_category": 637,
+    "dim_year": 62,
+    "fact_track": 89741,
+    "fact_award": 5012,
+    "bridge_track_artist": 123424,
+    "bridge_track_genre": 113550
+  },
+  "reconciled": true,
+  "duration_seconds": 49.12
+}

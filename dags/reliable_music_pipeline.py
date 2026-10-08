@@ -29,6 +29,15 @@ DATA_ROOT = "/opt/airflow/data"
 DEFAULT_SPOTIFY_SOURCE = f"{DATA_ROOT}/raw/spotify_dataset.csv"
 
 
+def _log_extract(result: dict, source: str) -> None:
+    """Batch context for observability: what was read, from where, how many rows, where it went."""
+    ctx = get_current_context()
+    log.info("Batch context | run_id=%s | logical_date=%s | try=%s",
+             ctx["run_id"], ctx.get("logical_date"), ctx["ti"].try_number)
+    log.info("Extracted %s rows from %s -> %s (metadata: %s)",
+             result["rows"], source, result["path"], result["metadata_path"])
+
+
 def _raw_gate(extract_result: dict) -> dict:
     """Run the raw validation gate; a critical failure fails the task WITHOUT retries."""
     from src.validation import CriticalQualityFailure, validate_raw_batch
@@ -79,6 +88,8 @@ def _raw_gate(extract_result: dict) -> dict:
 def reliable_music_pipeline():
 
     # ------------------------------------------------------------------ Spotify branch
+    # Retries (2 x 30 s) cover only transient I/O problems (e.g. the mounted volume is briefly
+    # unavailable). A missing file or an unparseable CSV is deterministic -> fail at once.
     @task(task_id="extract_spotify", retries=2, retry_delay=pendulum.duration(seconds=30))
     def extract_spotify_task() -> dict:
         from src.extract import extract_spotify
@@ -87,18 +98,32 @@ def reliable_music_pipeline():
         source = context["params"]["spotify_source"]
         if not source.startswith(f"{DATA_ROOT}/"):
             raise AirflowFailException(f"spotify_source must be inside {DATA_ROOT}: {source}")
-        return extract_spotify(context["run_id"], source)
+        try:
+            result = extract_spotify(context["run_id"], source)
+        except (FileNotFoundError, ValueError) as exc:  # ValueError includes pandas ParserError
+            raise AirflowFailException(f"Spotify source unusable (no retry): {exc}") from exc
+        _log_extract(result, source)
+        return result
 
     @task(task_id="validate_spotify_raw")
     def validate_spotify_raw(extract_result: dict) -> dict:
         return _raw_gate(extract_result)
 
     # ------------------------------------------------------------------ Grammy branch
+    # Retries (2 x 30 s) cover a temporary database outage (OperationalError). A missing
+    # table or column (ProgrammingError) is a contract problem -> fail at once.
     @task(task_id="extract_grammys", retries=2, retry_delay=pendulum.duration(seconds=30))
     def extract_grammys_task() -> dict:
-        from src.extract import extract_grammys
+        from sqlalchemy.exc import ProgrammingError
 
-        return extract_grammys(get_current_context()["run_id"])
+        from src.extract import GRAMMY_TABLE, extract_grammys
+
+        try:
+            result = extract_grammys(get_current_context()["run_id"])
+        except ProgrammingError as exc:
+            raise AirflowFailException(f"Grammy source contract broken (no retry): {exc.orig}") from exc
+        _log_extract(result, f"grammy_source.{GRAMMY_TABLE}")
+        return result
 
     @task(task_id="validate_grammys_raw")
     def validate_grammys_raw(extract_result: dict) -> dict:
@@ -143,18 +168,15 @@ def reliable_music_pipeline():
         Retries only for transient problems (e.g. lost DB connection): the load is idempotent,
         so retrying is safe. Data problems (FK/CHECK/UNIQUE) and the test fault fail at once.
         """
-        from sqlalchemy.exc import DataError, IntegrityError
-
-        from src.load import InjectedLoadFailure, load_dw
+        from src.load import InjectedLoadFailure, LoadDataError, load_dw
 
         context = get_current_context()
         try:
             result = load_dw(prepared_gate["tables"], context["run_id"],
                              fault=context["params"]["load_fault"])
-        except (IntegrityError, DataError, InjectedLoadFailure) as exc:
-            # exc.orig is the short PostgreSQL message (without the huge INSERT statement).
-            cause = str(getattr(exc, "orig", exc)).strip()
-            raise AirflowFailException(f"Load rolled back, warehouse unchanged: {cause}") from exc
+        except (LoadDataError, InjectedLoadFailure) as exc:
+            # Deterministic: the transaction was rolled back and retrying would fail again.
+            raise AirflowFailException(str(exc)) from exc
 
         log.info("Load %s in %ss | rows: %s | evidence: %s", result["status"],
                  result["duration_seconds"], result["rows_loaded"], result["evidence_file"])

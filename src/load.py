@@ -57,6 +57,24 @@ class InjectedLoadFailure(RuntimeError):
     """TEST-ONLY: simulated crash in the middle of the load to prove the rollback."""
 
 
+class LoadDataError(RuntimeError):
+    """Deterministic data problem rejected by the database (FK, CHECK, UNIQUE, type): no retry."""
+
+
+def _db_error(exc: BaseException):
+    """Find the original PostgreSQL error in the exception chain (pandas/SQLAlchemy wrap it)."""
+    seen = set()
+    while exc is not None and id(exc) not in seen:
+        seen.add(id(exc))
+        orig = getattr(exc, "orig", None)
+        if orig is not None and getattr(orig, "pgcode", None):
+            return orig
+        if getattr(exc, "pgcode", None):
+            return exc
+        exc = exc.__cause__ or exc.__context__
+    return None
+
+
 def _read_prepared(name: str, path: str) -> pd.DataFrame:
     """Read a prepared table exactly (rule X1) and fix the dtypes CSV cannot keep."""
     df = read_csv_exact(path)
@@ -133,7 +151,8 @@ def load_dw(tables: dict[str, str], run_id: str, fault: str = "none") -> dict:
             mismatches = {t: {"prepared": loaded[t], "db": in_db[t]}
                           for t in LOAD_ORDER if loaded[t] != in_db[t]}
             if mismatches:
-                raise RuntimeError(f"Load reconciliation failed: {mismatches}")
+                # Deterministic: the same batch would mismatch again -> LoadDataError (no retry).
+                raise LoadDataError(f"Load reconciliation failed (rule L2): {mismatches}")
 
             conn.execute(text("INSERT INTO etl_load_audit (run_id, table_name, rows_loaded) "
                               "VALUES (:run_id, :table_name, :rows)"),
@@ -142,9 +161,15 @@ def load_dw(tables: dict[str, str], run_id: str, fault: str = "none") -> dict:
         # The transaction was rolled back: show that the warehouse did not change.
         with engine.connect() as conn:
             summary["after_rollback"] = _snapshot(conn)
-        summary.update(status="ROLLED_BACK", error=f"{type(exc).__name__}: {exc}",
+        db_err = _db_error(exc)
+        # Short PostgreSQL message, without the huge INSERT statement and its values.
+        cause = f"{type(db_err).__name__}: {str(db_err).strip()}" if db_err else f"{type(exc).__name__}: {exc}"
+        summary.update(status="ROLLED_BACK", error=cause,
                        unchanged=summary["after_rollback"] == summary["before"])
         summary["evidence_file"] = _write_evidence(run_id, summary)
+        # SQLSTATE class 22 = data exception, 23 = integrity violation: deterministic, never retried.
+        if db_err is not None and str(db_err.pgcode)[:2] in ("22", "23"):
+            raise LoadDataError(f"Load rolled back, warehouse unchanged. {cause}") from exc
         raise
 
     with engine.connect() as conn:
