@@ -18,6 +18,7 @@ parses fast in the dag-processor.
 from __future__ import annotations
 
 import logging
+import os
 
 import pendulum
 from airflow.exceptions import AirflowFailException
@@ -95,7 +96,8 @@ def reliable_music_pipeline():
         from src.extract import extract_spotify
 
         context = get_current_context()
-        source = context["params"]["spotify_source"]
+        # strip(): a value pasted in the trigger form may carry spaces; normpath(): blocks "../" escapes.
+        source = os.path.normpath(context["params"]["spotify_source"].strip())
         if not source.startswith(f"{DATA_ROOT}/"):
             raise AirflowFailException(f"spotify_source must be inside {DATA_ROOT}: {source}")
         try:

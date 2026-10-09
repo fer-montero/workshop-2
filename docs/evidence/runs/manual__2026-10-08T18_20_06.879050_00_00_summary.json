@@ -1,0 +1,62 @@
+{
+  "run_id": "manual__2026-10-08T18:20:06.879050+00:00",
+  "stages": {
+    "extract_spotify": {
+      "status": "OK",
+      "rows": 114000,
+      "source": {
+        "type": "csv",
+        "path": "/opt/airflow/data/test/spotify_bad_popularity.csv",
+        "sha256": "00d541a76f07ed37f3f84b70499943ffc46e630d31be8043ff78914b2cbf2791"
+      },
+      "extracted_at_utc": "2026-10-08T18:20:27.531810+00:00"
+    },
+    "extract_grammys": {
+      "status": "OK",
+      "rows": 4810,
+      "source": {
+        "type": "postgresql",
+        "database": "grammy_source",
+        "table": "grammy_awards"
+      },
+      "extracted_at_utc": "2026-10-08T18:20:20.716325+00:00"
+    },
+    "validate_spotify_raw": {
+      "status": "BLOCKED",
+      "failed_rules": {
+        "critical": [
+          "DQ03"
+        ],
+        "warning": [],
+        "info": []
+      },
+      "rows_validated": {
+        "spotify_raw": 114000
+      },
+      "evidence": "docs/evidence/gx/manual__2026-10-08T18_20_06.879050_00_00/spotify_raw.json"
+    },
+    "validate_grammys_raw": {
+      "status": "PASS_WITH_FINDINGS",
+      "failed_rules": {
+        "critical": [],
+        "warning": [],
+        "info": [
+          "DQ13"
+        ]
+      },
+      "rows_validated": {
+        "grammy_raw": 4810
+      },
+      "evidence": "docs/evidence/gx/manual__2026-10-08T18_20_06.879050_00_00/grammy_raw.json"
+    },
+    "transform_and_integrate": {
+      "status": "not reached / missing"
+    },
+    "validate_prepared": {
+      "status": "not reached / missing"
+    },
+    "load_dw": {
+      "status": "not reached / missing"
+    }
+  }
+}

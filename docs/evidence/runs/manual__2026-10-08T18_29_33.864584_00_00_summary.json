@@ -1,0 +1,125 @@
+{
+  "run_id": "manual__2026-10-08T18:29:33.864584+00:00",
+  "stages": {
+    "extract_spotify": {
+      "status": "OK",
+      "rows": 114000,
+      "source": {
+        "type": "csv",
+        "path": "/opt/airflow/data/raw/spotify_dataset.csv",
+        "sha256": "b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd"
+      },
+      "extracted_at_utc": "2026-10-08T18:29:52.938943+00:00"
+    },
+    "extract_grammys": {
+      "status": "OK",
+      "rows": 4810,
+      "source": {
+        "type": "postgresql",
+        "database": "grammy_source",
+        "table": "grammy_awards"
+      },
+      "extracted_at_utc": "2026-10-08T18:29:43.961174+00:00"
+    },
+    "validate_spotify_raw": {
+      "status": "PASS",
+      "failed_rules": {
+        "critical": [],
+        "warning": [],
+        "info": []
+      },
+      "rows_validated": {
+        "spotify_raw": 114000
+      },
+      "evidence": "docs/evidence/gx/manual__2026-10-08T18_29_33.864584_00_00/spotify_raw.json"
+    },
+    "validate_grammys_raw": {
+      "status": "PASS_WITH_FINDINGS",
+      "failed_rules": {
+        "critical": [],
+        "warning": [],
+        "info": [
+          "DQ13"
+        ]
+      },
+      "rows_validated": {
+        "grammy_raw": 4810
+      },
+      "evidence": "docs/evidence/gx/manual__2026-10-08T18_29_33.864584_00_00/grammy_raw.json"
+    },
+    "transform_and_integrate": {
+      "status": "OK",
+      "table_rows": {
+        "dim_artist": 30784,
+        "dim_genre": 114,
+        "dim_category": 637,
+        "dim_year": 62,
+        "fact_track": 89741,
+        "fact_award": 5012,
+        "bridge_track_artist": 123424,
+        "bridge_track_genre": 113550
+      },
+      "awards_reconcile_with_source": true,
+      "evidence": "docs/evidence/transform/manual__2026-10-08T18_29_33.864584_00_00/transform_metrics.json"
+    },
+    "validate_prepared": {
+      "status": "PASS",
+      "failed_rules": {
+        "critical": [],
+        "warning": [],
+        "info": []
+      },
+      "rows_validated": {
+        "fact_track": 89741,
+        "fact_award": 5012,
+        "dim_artist": 30784,
+        "dim_genre": 114
+      },
+      "evidence": "docs/evidence/gx/manual__2026-10-08T18_29_33.864584_00_00/prepared.json"
+    },
+    "load_dw": {
+      "status": "ROLLED_BACK",
+      "evidence": "docs/evidence/load/manual__2026-10-08T18_29_33.864584_00_00/load_summary.json",
+      "before": {
+        "table_rows": {
+          "dim_artist": 30784,
+          "dim_genre": 114,
+          "dim_category": 637,
+          "dim_year": 62,
+          "fact_track": 89741,
+          "fact_award": 5012,
+          "bridge_track_artist": 123424,
+          "bridge_track_genre": 113550
+        },
+        "measures": {
+          "total_awards": 5012.0,
+          "awards_unknown_artist": 1906.0,
+          "avg_track_popularity": 33.2072,
+          "candidate_artists": 33.0,
+          "consolidated_artists": 151.0
+        }
+      },
+      "after": {
+        "table_rows": {
+          "dim_artist": 30784,
+          "dim_genre": 114,
+          "dim_category": 637,
+          "dim_year": 62,
+          "fact_track": 89741,
+          "fact_award": 5012,
+          "bridge_track_artist": 123424,
+          "bridge_track_genre": 113550
+        },
+        "measures": {
+          "total_awards": 5012.0,
+          "awards_unknown_artist": 1906.0,
+          "avg_track_popularity": 33.2072,
+          "candidate_artists": 33.0,
+          "consolidated_artists": 151.0
+        }
+      },
+      "error": "InjectedLoadFailure: TEST-ONLY injected failure after loading the fact tables",
+      "unchanged": true
+    }
+  }
+}
